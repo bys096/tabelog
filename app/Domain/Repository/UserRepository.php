@@ -15,9 +15,9 @@ class UserRepository implements UserRepositoryInterface
         $this->eloquentUser = $eloquentUser;
     }
 
-    public function findByName(string $name): ?User
+    public function findByEmail(string $email): ?User
     {
-        $record = $this->eloquentUser->where('name', $name)->first();
+        $record = $this->eloquentUser->where('email', $email)->first();
         if ($record === null) {
             return null;
         }

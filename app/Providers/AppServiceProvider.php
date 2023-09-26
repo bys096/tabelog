@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Fluent\Logger\FluentLogger;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,6 +16,10 @@ class AppServiceProvider extends ServiceProvider
             \App\Domain\Repository\UserRepositoryInterface::class,
             \App\Domain\Repository\UserRepository::class
         );
+
+        $this->app->singleton(FluentLogger::class, function () {
+            return new FluentLogger('localhost', 24224);
+        });
     }
 
     /**

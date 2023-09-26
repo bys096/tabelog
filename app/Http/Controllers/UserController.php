@@ -19,15 +19,15 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create()
     {
-        if ($this->userService->exists($request->name)) {
-            return response('', Response::HTTP_OK);
-        }
-
-        $id = $this->userService->store($request->name, $request->email, $request->password);
-        return response('', Response::HTTP_CREATED)
-            ->header('Location', '/api/users/' . $id);
+//        if ($this->userService->exists($request->name)) {
+//            return response('', Response::HTTP_OK);
+//        }
+//
+//        $id = $this->userService->store($request->name, $request->email, $request->password);
+//        return response('', Response::HTTP_CREATED)
+//            ->header('Location', '/api/users/' . $id);
     }
 
     /**
@@ -35,7 +35,28 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($this->userService->exists($request->email)) {
+            return response('', Response::HTTP_OK);
+        }
+
+        $id = $this->userService->store($request->username, $request->email, $request->password);
+//        return response('', Response::HTTP_CREATED)
+//            ->header('Location', '/api/users/' . $id);
+        return redirect('/auth');
+    }
+
+    public function emailCheck(Request $request)
+    {
+        if ($this->userService->exists($request->email)) {
+//            return response('true', Response::HTTP_OK);
+            return response()->json([
+                'result' => 'true'
+            ]);
+        }
+//        return response('false', Response::HTTP_OK);
+        return response()->json([
+            'result' => 'false'
+        ]);
     }
 
     /**
