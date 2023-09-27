@@ -274,4 +274,8 @@ button:focus.off.login, button:active.off.login, button:hover.off.login {
     color: green;
 }
 
+.alert-danger {
+    color: darkred;
+}
+
 

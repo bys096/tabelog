@@ -60,16 +60,26 @@
                     @csrf
                     <div class="form-element form-stack">
                         <label for="username-login" class="form-label">Email</label>
-                        <input id="username-login" type="email" name="email">
+                        <input id="username-login" type="email" name="email" value="{{ old('email') }}">
                     </div>
                     <div class="form-element form-stack">
                         <label for="password-login" class="form-label">Password</label>
                         <input id="password-login" type="password" name="password">
                     </div>
+                    @error('email_error')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                    @if($errors->first('email'))
+{{--                        @foreach($errors->all() as $error)--}}
+{{--                            <li>{{ $error }}</li>--}}
+{{--                        @endforeach--}}
+                        <div class="alert alert-danger">{{ $errors->first('email') }}</div>
+                    @endif
                     <div class="form-element form-submit">
                         <button id="logIn" class="login" type="submit" name="login">Log In</button>
                         <button id="goRight" class="login off" name="signup">Sign Up</button>
                     </div>
+
                 </form>
             </div>
         </div>
@@ -111,12 +121,20 @@ html5-form-validation-with-the-pattern-attribute--cms-25145
         } else {
             alert('EMAIL 중복 체크를 완료해주세요!');
         }
-
     });
+
+    // login form submit
+    $('#logIn').click(function () {
+        const form = document.getElementById('form-login');
+        form.action = '/auth/login';
+        form.submit();
+        console.log('login 제출');
+    })
 
 
     // email check btn click
     $('#email-check').click(function () {
+        // alert('중복체크');
         let emailValue = $('#email').val();
         const url = '{{ route('email.check') }}';
         $.ajax({
@@ -124,7 +142,7 @@ html5-form-validation-with-the-pattern-attribute--cms-25145
             url: url,
             success: function (response) {
                 const isExist = response.result;
-
+                console.log(response);
                 if(isExist == 'true') {
                     $('#email-check-result').addClass('email-check-false');
                     $('#email-check-result').removeClass('email-check-true');

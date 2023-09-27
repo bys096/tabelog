@@ -17,26 +17,27 @@
             <div class="user-mail">alexander@email.com</div>
         </div>
         <div class="sidebar-menu">
-            <a href="#" class="sidebar-menu__link active">Design</a>
-            <a href="#" class="sidebar-menu__link">Barbeque</a>
-            <a href="#" class="sidebar-menu__link">Productivity</a>
-            <a href="#" class="sidebar-menu__link">Workout</a>
-            <a href="#" class="sidebar-menu__link">Book</a>
-            <a href="#" class="sidebar-menu__link">Snack</a>
+            <a href="#" class="sidebar-menu__link active">Dairy</a>
+            <a href="#" class="sidebar-menu__link">통계</a>
+            <a href="#" class="sidebar-menu__link">성분 검색</a>
+            <a href="#" class="sidebar-menu__link">설정</a>
         </div>
-        <label class="toggle">
-            <input type="checkbox">
-            <span class="slider"></span>
-        </label>
+        <button onclick="location.href='/auth/logout'">Log Out</button>
+{{--        <label class="toggle">--}}
+{{--            <input type="checkbox">--}}
+{{--            <span class="slider"></span>--}}
+{{--        </label>--}}
     </div>
     <div class="main">
         <div class="main-header">
-            <div class="main-header__title">Productivity</div>
+            <div class="main-header__title">Diary</div>
 {{--            <div class="main-header__avatars">--}}
 {{--                <button class="add-button"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">--}}
 {{--                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>--}}
 {{--                    </svg></button>--}}
 {{--            </div>--}}
+
+{{--            버튼 아이콘 + -> 연필모양으로 변경 필요            --}}
             <button class="main-header__add">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
@@ -44,6 +45,7 @@
             </button>
         </div>
 
+{{--        검색 기능 추가 필요         --}}
         <div class="main-content">
             <div class="card card-2 card-img"></div>
             <div class="card card-3 card-img"></div>

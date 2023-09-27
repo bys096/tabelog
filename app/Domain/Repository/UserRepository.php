@@ -39,4 +39,23 @@ class UserRepository implements UserRepositoryInterface
 
         return (int) $eloquent->id;
     }
+
+
+    public function findByEmailAndPassword(string $email, string $password): ?User
+    {
+        $record = $this->eloquentUser
+            ->where('email', $email)
+            ->where('password', $password)
+            ->first();
+
+        if ($record === null) {
+            return null;
+        }
+        return new User(
+            $record->id,
+            $record->name,
+            $record->email,
+            $record->password
+        );
+    }
 }

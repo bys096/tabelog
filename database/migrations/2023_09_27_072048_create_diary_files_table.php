@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('diary_files', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->string('origin_name');
+            $table->string('file_name');
+            $table->string('type');
+            $table->bigInteger('size');
             $table->timestamps();
+
+            $table->foreignId('diary_id')->constrained();
         });
     }
 
@@ -27,7 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('diaries');
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('diary_files');
     }
 };
