@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Domain\Repository\DiaryRepository;
+use App\Domain\Repository\DiaryRepositoryInterface;
 use Fluent\Logger\FluentLogger;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,6 +17,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             \App\Domain\Repository\UserRepositoryInterface::class,
             \App\Domain\Repository\UserRepository::class
+        );
+
+        $this->app->bind(
+            DiaryRepositoryInterface::class,
+            DiaryRepository::class
         );
 
         $this->app->singleton(FluentLogger::class, function () {

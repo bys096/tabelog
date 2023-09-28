@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DiaryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +30,10 @@ Route::group(['prefix' => '/auth'], function () {
     Route::get('', [AuthController::class, 'index']);           // Login Form
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/login', [AuthController::class, 'login'])->name('login');
+});
+
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/diary', [DiaryController::class, 'index']);
+    Route::post('/diary', [DiaryController::class, 'store']);
 });

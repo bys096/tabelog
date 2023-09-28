@@ -58,4 +58,9 @@ class UserRepository implements UserRepositoryInterface
             $record->password
         );
     }
+
+    public function findById(int $userId)
+    {
+        return $this->eloquentUser->where('id', $userId)->first();
+    }
 }
