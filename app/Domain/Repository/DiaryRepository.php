@@ -48,4 +48,10 @@ class DiaryRepository implements DiaryRepositoryInterface
 
         return $newDiary->id;
     }
+
+    public function deleteById(int $diaryId)
+    {
+        $diary = $this->eloquentDiary->where('id', $diaryId);
+        return $diary->delete();
+    }
 }

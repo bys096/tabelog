@@ -14,4 +14,5 @@ interface UserRepositoryInterface
     public function store(User $user): int;
 
     public function findByEmailAndPassword(string $email, string $password): ?User;
+
 }

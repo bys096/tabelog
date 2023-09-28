@@ -17,6 +17,7 @@ class DiaryController extends Controller
         $this->diaryService = $diaryService;
     }
 
+    // 自分が書いたDIARYを検索
     public function index()
     {
         $userId = auth()->id();
@@ -25,6 +26,7 @@ class DiaryController extends Controller
 //        Log::info(serialize($record));
     }
 
+    // 新しいDAIRYの作成
     public function store(Request $request)
     {
         $userId = auth()->id();
@@ -34,5 +36,11 @@ class DiaryController extends Controller
 
         $this->diaryService->storeDiary($userId, $diaryDTO);
 
+    }
+
+    // DIARY削除
+    public function destroy($diaryId)
+    {
+        $this->diaryService->deleteDiary($diaryId);
     }
 }

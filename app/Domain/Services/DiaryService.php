@@ -26,4 +26,9 @@ class DiaryService
         $user = $this->userRepository->findById($userId);
         $this->diaryRepository->storeDiary($user, $dto);
     }
+
+    public function deleteDiary(int $diaryId)
+    {
+        $this->diaryRepository->deleteById($diaryId);
+    }
 }
