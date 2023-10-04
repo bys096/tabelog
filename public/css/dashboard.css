@@ -349,3 +349,24 @@ input:checked + .slider:before {
         grid-column-start: auto;
     }
 }
+
+
+.create-modal {
+    height: 80vh;
+    width: 80vw;
+    background-color: white;
+    /*background-color: lightgray;*/
+    visibility: hidden;
+}
+
+#content {
+    border-radius: 120px;
+    position: relative;
+    top: 4.5vh
+}
+
+#modalCloseBtn {
+    position: absolute;
+    right: 2vw;
+    top: 1vh;
+}

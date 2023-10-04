@@ -22,20 +22,39 @@ class DiaryController extends Controller
     public function index()
     {
         $userId = auth()->id();
-//        Log::info('라라벨 사용자 id: ' . $userId);
         return $this->diaryService->findDiaries($userId);
 //        Log::info(serialize($record));
     }
 
+
+    public function create()
+    {
+        return view("diaries.create");
+    }
+
+
     // 新しいDAIRYの作成
     public function store(Request $request)
     {
-        $userId = auth()->id();
-        $diaryDTO = new DiaryStoreRequestDTO();
-        $diaryDTO->setTitle($request->input('title'));
-        $diaryDTO->setContent($request->input('content'));
+//        $userId = auth()->id();
+//        $diaryDTO = new DiaryStoreRequestDTO();
+//        $diaryDTO->setTitle($request->input('title'));
+//        $diaryDTO->setContent($request->input('content'));
+//
+//        $this->diaryService->storeDiary($userId, $diaryDTO);
 
-        $this->diaryService->storeDiary($userId, $diaryDTO);
+
+        if ($request->hasFile('image')) {
+            Log::info($request->file('image'));
+            $fileName = time().'_'.$request -> file('image') -> getClientOriginalName();
+            Log::info($fileName);
+            $path = $request -> file('image') -> storeAs('public/images', $fileName);
+
+            return response()->json([
+               "imageUrl" => 'http://localhost:8090/storage/images/' . $fileName
+            ]);
+
+        }
 
     }
 

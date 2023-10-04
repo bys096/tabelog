@@ -39,8 +39,8 @@ class DiaryRepository implements DiaryRepositoryInterface
     public function storeDiary(User $user, DiaryStoreRequestDTO $dto): int
     {
 //        $eloquent = $this->eloquentDiary->newInstance();
-//        $eloquent->title = $diary->getTitle();
-//        $eloquent->content = $diary->getContent();
+//        $eloquent->title = $diaries->getTitle();
+//        $eloquent->content = $diaries->getContent();
 //        $eloquent->save();
         $newDiary = $user->diaries()->create([
             'title' => $dto->getTitle(),
