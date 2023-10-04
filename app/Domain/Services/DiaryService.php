@@ -3,6 +3,7 @@
 namespace App\Domain\Services;
 
 use App\Domain\DTO\DiaryStoreRequestDTO;
+use App\Domain\DTO\DiaryUpdateRequestDTO;
 use App\Domain\Repository\DiaryRepositoryInterface;
 use App\Domain\Repository\UserRepositoryInterface;
 class DiaryService
@@ -30,5 +31,14 @@ class DiaryService
     public function deleteDiary(int $diaryId)
     {
         $this->diaryRepository->deleteById($diaryId);
+    }
+
+    public function updateDiary(int $diaryId, DiaryUpdateRequestDTO $dto)
+    {
+        $diary = $this->diaryRepository->findById($diaryId);
+        $diary->title = $dto->getTitle();
+        $diary->content = $dto->getContent();
+
+        $this->diaryRepository->saveDiary($diary);
     }
 }

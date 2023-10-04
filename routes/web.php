@@ -37,4 +37,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/diary', [DiaryController::class, 'index']);
     Route::post('/diary', [DiaryController::class, 'store']);
     Route::delete('/diary/{diaryId}', [DiaryController::class, 'destroy']);
+    Route::patch('/diary/{diaryId}', [DiaryController::class, 'update']);
 });

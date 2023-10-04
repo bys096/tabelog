@@ -3,6 +3,7 @@
 namespace App\Domain\Repository;
 
 use App\Domain\DTO\DiaryStoreRequestDTO;
+use App\Domain\DTO\DiaryUpdateRequestDTO;
 use App\Domain\Entity\Diary;
 use App\Domain\Models\Diary as EloquentDiary;
 use App\Domain\Models\User;
@@ -53,5 +54,16 @@ class DiaryRepository implements DiaryRepositoryInterface
     {
         $diary = $this->eloquentDiary->where('id', $diaryId);
         return $diary->delete();
+    }
+
+
+    public function saveDiary(EloquentDiary $eloquentDiary)
+    {
+        $eloquentDiary->save();
+    }
+
+    public function findById(int $diaryId)
+    {
+        return $this->eloquentDiary->where('id', $diaryId)->first();
     }
 }

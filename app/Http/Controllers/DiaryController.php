@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Domain\DTO\DiaryStoreRequestDTO;
+use App\Domain\DTO\DiaryUpdateRequestDTO;
 use Illuminate\Http\Request;
 use App\Domain\Services\DiaryService;
 use Illuminate\Support\Facades\Log;
@@ -43,4 +44,17 @@ class DiaryController extends Controller
     {
         $this->diaryService->deleteDiary($diaryId);
     }
+
+
+    public function update(Request $request, int $diaryId)
+    {
+        Log::info('update request');
+        Log::info($request->input('title'));
+        Log::info($request->input('content'));
+
+        $dto = new DiaryUpdateRequestDTO($request->input('title'), $request->input('content'));
+
+        $this->diaryService->updateDiary($diaryId, $dto);
+    }
+
 }
