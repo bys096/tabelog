@@ -355,8 +355,10 @@ input:checked + .slider:before {
     height: 80vh;
     width: 80vw;
     background-color: white;
-    /*background-color: lightgray;*/
     visibility: hidden;
+    position: absolute;
+    z-index: 2;
+    border-radius: 40px;
 }
 
 #content {

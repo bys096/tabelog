@@ -12,32 +12,28 @@ class AuthController extends Controller
 {
 
     private $userService;
-
     protected $redirectTo = RouteServiceProvider::HOME;
 
     public function __construct(UserService $userService)
     {
+//        Logoutを除いては認証が必要ありません。
         $this->middleware('guest')->except('logout');
         $this->userService = $userService;
     }
 
+//    Login Form
     public function index()
     {
         return view('users.login');
     }
 
 
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request)                    // Form RequestでValidation検査
     {
-        Log::info('login method');
         $request->validated();
-
         $credentials = $request->only('email', 'password');
 
-        Log::info('login method processing');
-
         if (auth()->attempt($credentials)) {
-            Log::info('login attempt');
             return redirect()->intended('/dashboard');
         }
         Log::info('erorrs occurs');

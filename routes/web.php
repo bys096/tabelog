@@ -25,18 +25,17 @@ Route::get('/dashboard', [HomeController::class, 'index'])->middleware('auth');
 Route::resource('/users', UserController::class);
 Route::post('/users/email/check', [UserController::class, 'emailCheck'])->name('email.check');
 
-
+// Login / Logout
 Route::group(['prefix' => '/auth'], function () {
-    Route::get('', [AuthController::class, 'index']);           // Login Form
+    Route::get('', [AuthController::class, 'index']);                                   // Login Form
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/login', [AuthController::class, 'login'])->name('login');
 });
 
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/diaries', [DiaryController::class, 'index']);
-    Route::get('/diaries/create', [DiaryController::class, 'create']);
-    Route::post('/diaries', [DiaryController::class, 'store']);
-    Route::delete('/diaries/{diaryId}', [DiaryController::class, 'destroy']);
-    Route::patch('/diaries/{diaryId}', [DiaryController::class, 'update']);
+    Route::get('/diaries', [DiaryController::class, 'index']);                          // Diary List
+    Route::post('/diaries', [DiaryController::class, 'store']);                         // Diary Save
+    Route::delete('/diaries/{diaryId}', [DiaryController::class, 'destroy']);           // Diary Delete
+    Route::patch('/diaries/{diaryId}', [DiaryController::class, 'update']);             // Diary Update
 });

@@ -27,12 +27,6 @@ class DiaryController extends Controller
     }
 
 
-    public function create()
-    {
-        return view("diaries.create");
-    }
-
-
     // 新しいDAIRYの作成
     public function store(Request $request)
     {
@@ -58,21 +52,20 @@ class DiaryController extends Controller
 
     }
 
-    // DIARY削除
+    // Diary削除
     public function destroy($diaryId)
     {
         $this->diaryService->deleteDiary($diaryId);
     }
 
 
+    // Diary修正
     public function update(Request $request, int $diaryId)
     {
-        Log::info('update request');
-        Log::info($request->input('title'));
-        Log::info($request->input('content'));
-
-        $dto = new DiaryUpdateRequestDTO($request->input('title'), $request->input('content'));
-
+        $dto = new DiaryUpdateRequestDTO(
+            $request->input('title'),
+            $request->input('content')
+        );
         $this->diaryService->updateDiary($diaryId, $dto);
     }
 

@@ -3,30 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>食べログ</title>
+    {{--    dashboard css   --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link rel="stylesheet" href="{{ asset('/css/dashboard.css') }}">
 
-{{--    editor css--}}
+    {{--    editor css  --}}
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
     <link rel="stylesheet" href="https://nhn.github.io/tui.editor/latest/dist/cdn/theme/toastui-editor-dark.css">
-    <style>
-        .create-modal {
-            position: absolute;
-            /*left: 30vw;*/
-            z-index: 2;
-            border-radius: 40px;
-        }
-    </style>
+
 </head>
 <body>
-<!-- partial:index.partial.html -->
-
-
+    {{--    Diary追加Modal    --}}
     <div class="create-modal" id="createModal">
         <button class="modal-close-btn" id="modalCloseBtn">Close</button>
-        <div id="content">
-
-        </div>
+        {{--    Editor  --}}
+        <div id="content"></div>
     </div>
     <div class="app">
         <div class="sidebar">
@@ -76,14 +67,13 @@
         </div>
     </div>
 
-<!-- partial -->
-<script  src="{{ asset('js/dashboard.js') }}"></script>
 
-{{--jquery--}}
+<script  src="{{ asset('js/dashboard.js') }}"></script>
+{{--    jquery  --}}
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
 
 
-{{--editor js--}}
+{{--    editor js   --}}
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
@@ -96,8 +86,6 @@
         } catch(err) {
             console.log(err);
         }
-
-
     }
 
     const editor = new toastui.Editor({
@@ -123,17 +111,9 @@
                 } catch (err) {
                     console.log(err);
                 }
-
-
-                // console.log(blob);
-                // console.log(callback);
-
-
             }
         }
     });
-
-
 
     $('#addBtn').click(function() {
         const diaryAddModal = $('#createModal');
