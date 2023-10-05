@@ -1,25 +1,64 @@
-<!DOCTYPE html>
-<html lang="en" >
-<head>
-    <meta charset="UTF-8">
-    <title>食べログ</title>
+@extends('footer')
+
+@section('style')
     {{--    dashboard css   --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-    <link rel="stylesheet" href="{{ asset('/css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
     {{--    editor css  --}}
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
     <link rel="stylesheet" href="https://nhn.github.io/tui.editor/latest/dist/cdn/theme/toastui-editor-dark.css">
+@endsection
 
-</head>
-<body>
+@section('content')
     {{--    Diary追加Modal    --}}
     <div class="create-modal" id="createModal">
-        <input type="text" name="" id="">
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+
+            <div x-data="select" class="relative w-[30rem]" @click.outside="open = false">
+                <button @click="toggle" :class="(open) && 'ring-blue-600'" class="flex w-full items-center justify-between rounded bg-white p-2 ring-1 ring-gray-300">
+                    <span x-text="(language == '') ? 'Choose language' : language"></span>
+                    <i class="fas fa-chevron-down text-xl"></i>
+                </button>
+
+                <ul class="z-2 absolute mt-1 w-full rounded bg-gray-50 ring-1 ring-gray-300" x-show="open">
+                    <li class="cursor-pointer select-none p-2 hover:bg-gray-200" @click="setLanguage('breakfast')">BreakFast</li>
+                    <li class="cursor-pointer select-none p-2 hover:bg-gray-200" @click="setLanguage('lunch')">Lunch</li>
+                    <li class="cursor-pointer select-none p-2 hover:bg-gray-200" @click="setLanguage('dinner')">Dinner</li>
+                    <li class="cursor-pointer select-none p-2 hover:bg-gray-200" @click="setLanguage('dessert')">Dessert</li>
+                </ul>
+            </div>
+
+
+        <script>
+            document.addEventListener("alpine:init", () => {
+                Alpine.data("select", () => ({
+                    open: false,
+                    language: "",
+
+                    toggle() {
+                        this.open = !this.open;
+                    },
+
+                    setLanguage(val) {
+                        this.language = val;
+                        this.open = false;
+                    },
+                }));
+            });
+        </script>
+        <div class="">
+            <label for="Birthday" class="block text-sm text-gray-500 dark:text-gray-300">Birthday</label>
+            <input type="date" placeholder="John Doe" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+        </div>
         <button class="modal-close-btn" id="modalCloseBtn">Close</button>
         {{--    Editor  --}}
         <div id="content"></div>
     </div>
+    <div id="app-container">
     <div class="app">
         <div class="sidebar">
             <div class="user">
@@ -67,79 +106,79 @@
             </div>
         </div>
     </div>
+    </div>
+@endsection
+
+@section('script')
+    <script  src="{{ asset('js/dashboard.js') }}"></script>
+    {{--    jquery  --}}
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
 
 
-<script  src="{{ asset('js/dashboard.js') }}"></script>
-{{--    jquery  --}}
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
+    {{--    editor js   --}}
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-
-{{--    editor js   --}}
-<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-<script>
-    async function uploadDiaryImage(formData) {
-        try {
-            return await axios.post('/diaries', formData, {
-                // headers: {   }
-            });
-        } catch(err) {
-            console.log(err);
-        }
-    }
-
-    const editor = new toastui.Editor({
-        el: document.querySelector('#content'), // 에디터를 적용할 요소 (컨테이너)
-        height: '71vh',                        // 에디터 영역의 높이 값 (OOOpx || auto)
-        initialEditType: 'markdown',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
-        // initialValue: '내용을 입력해 주세요.',     // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
-        previewStyle: 'vertical',                // 마크다운 프리뷰 스타일 (tab || vertical),
-        placeholder: '内容を入力してください。',
-        // theme: 'dark',
-
-        hooks: {
-            async addImageBlobHook(blob, callback) {
-                const formData = new FormData();
-                formData.append("image", blob);
-
-                try {
-                    console.log('upload start');
-                    const res = await uploadDiaryImage(formData);
-                    console.log('response data:');
-                    console.log(res);
-                    callback(res.data.imageUrl, `image`);
-                } catch (err) {
-                    console.log(err);
-                }
+    <script>
+        async function uploadDiaryImage(formData) {
+            try {
+                return await axios.post('/diaries', formData, {
+                    // headers: {   }
+                });
+            } catch(err) {
+                console.log(err);
             }
         }
-    });
 
-    $('#addBtn').click(function() {
-        const diaryAddModal = $('#createModal');
+        const editor = new toastui.Editor({
+            el: document.querySelector('#content'), // 에디터를 적용할 요소 (컨테이너)
+            height: '71vh',                        // 에디터 영역의 높이 값 (OOOpx || auto)
+            initialEditType: 'markdown',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
+            // initialValue: '내용을 입력해 주세요.',     // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
+            previewStyle: 'vertical',                // 마크다운 프리뷰 스타일 (tab || vertical),
+            placeholder: '内容を入力してください。',
+            // theme: 'dark',
 
-        if (diaryAddModal.css('visibility') === 'hidden') {
-            diaryAddModal.css('z-index', '2');
-            diaryAddModal.css('visibility', 'visible');
-        } else {
-            diaryAddModal.css('visibility', 'hidden');
-            diaryAddModal.css('z-index', '-1');
-        }
-    });
+            hooks: {
+                async addImageBlobHook(blob, callback) {
+                    const formData = new FormData();
+                    formData.append("image", blob);
 
-    $('#modalCloseBtn').click(function () {
-        const diaryAddModal = $('#createModal');
+                    try {
+                        console.log('upload start');
+                        const res = await uploadDiaryImage(formData);
+                        console.log('response data:');
+                        console.log(res);
+                        callback(res.data.imageUrl, `image`);
+                    } catch (err) {
+                        console.log(err);
+                    }
+                }
+            }
+        });
 
-        if (diaryAddModal.css('visibility') === 'hidden') {
-            diaryAddModal.css('visibility', 'visible');
-            diaryAddModal.css('z-index', '2');
-        } else {
-            diaryAddModal.css('visibility', 'hidden');
-            diaryAddModal.css('z-index', '-1');
-        }
-    });
-</script>
+        $('#addBtn').click(function() {
+            const diaryAddModal = $('#createModal');
 
-</body>
-</html>
+            if (diaryAddModal.css('visibility') === 'hidden') {
+                diaryAddModal.css('z-index', '2');
+                diaryAddModal.css('visibility', 'visible');
+            } else {
+                diaryAddModal.css('visibility', 'hidden');
+                diaryAddModal.css('z-index', '-1');
+            }
+        });
+
+        $('#modalCloseBtn').click(function () {
+            const diaryAddModal = $('#createModal');
+
+            if (diaryAddModal.css('visibility') === 'hidden') {
+                diaryAddModal.css('visibility', 'visible');
+                diaryAddModal.css('z-index', '2');
+            } else {
+                diaryAddModal.css('visibility', 'hidden');
+                diaryAddModal.css('z-index', '-1');
+            }
+        });
+    </script>
+@endsection
