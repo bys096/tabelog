@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('hash_tags', function (Blueprint $table) {
             $table->id();
-            $table->string('tag_name', '10');
+            $table->string('tag_name', '10')->index();
             $table->timestamps();
         });
     }
@@ -23,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('diary_hash_tag');
+        Schema::dropIfExists('diary_segment_hash_tag');
         Schema::dropIfExists('hash_tags');
     }
 };

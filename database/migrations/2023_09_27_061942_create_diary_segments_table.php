@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('diary_files', function (Blueprint $table) {
+        Schema::create('diary_segments', function (Blueprint $table) {
             $table->id();
-            $table->string('origin_name');
-            $table->string('file_name');
-            $table->string('file_path');
-            $table->string('type');
-            $table->bigInteger('size');
+            $table->unsignedBigInteger('diary_id');
+            $table->string('content', 10000);
+            $table->string('meal_time', 10);
             $table->timestamps();
 
-            $table->foreignId('diary_segment_id')->constrained();
+            $table->foreign('diary_id')->references('id')->on('diaries');
         });
     }
 
@@ -29,6 +27,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('diary_files');
+        Schema::dropIfExists('diary_segment_hash_tag');
+        Schema::dropIfExists('diary_segments');
     }
 };

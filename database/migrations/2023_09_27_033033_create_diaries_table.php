@@ -13,10 +13,8 @@ return new class extends Migration
     {
         Schema::create('diaries', function (Blueprint $table) {
             $table->id();
-            $table->string('title', '100');
-            $table->string('content', '1000');
             $table->unsignedBigInteger('user_id');
-            $table->timestamps();
+            $table->date('date')->default(now()->toDateString());
 
             $table->foreign('user_id')->references('id')->on('users');
         });
@@ -27,7 +25,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('diary_hash_tag');
+        Schema::dropIfExists('diary_segments');
         Schema::dropIfExists('diaries');
     }
 };

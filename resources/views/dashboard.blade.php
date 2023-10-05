@@ -15,6 +15,7 @@
 <body>
     {{--    Diary追加Modal    --}}
     <div class="create-modal" id="createModal">
+        <input type="text" name="" id="">
         <button class="modal-close-btn" id="modalCloseBtn">Close</button>
         {{--    Editor  --}}
         <div id="content"></div>

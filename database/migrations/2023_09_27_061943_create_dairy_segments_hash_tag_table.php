@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('diary_hash_tag', function (Blueprint $table) {
+        Schema::create('diary_segment_hash_tag', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('diary_id')->constrained();
+            $table->foreignId('diary_segment_id')->constrained();
             $table->foreignId('hash_tag_id')->constrained();
-//            $table->timestamps();
         });
     }
 
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('diary_tag');
+        Schema::dropIfExists('diary_segment_hash_tag');
     }
 };
