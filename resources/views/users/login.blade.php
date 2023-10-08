@@ -140,20 +140,29 @@ html5-form-validation-with-the-pattern-attribute--cms-25145
         $.ajax({
             type: "POST",
             url: url,
-            success: function (response) {
-                const isExist = response.result;
-                console.log(response);
-                if(isExist == 'true') {
-                    $('#email-check-result').addClass('email-check-false');
-                    $('#email-check-result').removeClass('email-check-true');
-                    $('#ischeck').val('false');
-                    $('#email-check-result').text("이미 사용 중인 이메일입니다.");
-                }
-                else {
+            success: function (data, textStatus, jqXHR) {
+                console.log(data);
+                console.log(jqXHR);
+                if(jqXHR.status === 200) {
                     $('#email-check-result').addClass('email-check-true');
                     $('#email-check-result').removeClass('email-check-false');
                     $('#ischeck').val('true');
                     $('#email-check-result').text("사용 가능한 이메일입니다.");
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status === 409) {
+                    console.log(jqXHR);
+                    console.log(`error_status: ${jqXHR.status}`);
+                    $('#email-check-result').addClass('email-check-false');
+                    $('#email-check-result').removeClass('email-check-true');
+                    $('#ischeck').val('false');
+                    $('#email-check-result').text("이미 사용 중인 이메일입니다.");
+                } else if (jqXHR.status === 410) {
+                    $('#email-check-result').addClass('email-check-false');
+                    $('#email-check-result').removeClass('email-check-true');
+                    $('#ischeck').val('false');
+                    $('#email-check-result').text("삭제된 계정의 이메일입니다.");
                 }
             },
             data: {

@@ -15,19 +15,12 @@ class UserRepository implements UserRepositoryInterface
         $this->eloquentUser = $eloquentUser;
     }
 
-    public function findByEmail(string $email): ?User
+
+    public function findByEmailWithTrashed(string $email)
     {
-        $record = $this->eloquentUser->where('email', $email)->first();
-        if ($record === null) {
-            return null;
-        }
-        return new User(
-            $record->id,
-            $record->name,
-            $record->email,
-            $record->password
-        );
+        return $this->eloquentUser->withTrashed()->where('email', $email)->first();
     }
+
 
     public function store(User $user): int
     {

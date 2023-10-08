@@ -27,7 +27,7 @@ Route::post('/users/email/check', [UserController::class, 'emailCheck'])->name('
 
 // Login / Logout
 Route::group(['prefix' => '/auth'], function () {
-    Route::get('', [AuthController::class, 'index']);                                   // Login Form
+    Route::get('', [AuthController::class, 'index'])->name('index');                                   // Login Form
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/login', [AuthController::class, 'login'])->name('login');
 });

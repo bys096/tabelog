@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Domain\Models\User;
 use App\Domain\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -40,23 +41,29 @@ class UserController extends Controller
         }
 
         $id = $this->userService->store($request->username, $request->email, $request->password);
-//        return response('', Response::HTTP_CREATED)
-//            ->header('Location', '/api/users/' . $id);
+//        return response('', Response::HTTP_CREATED)->header('Location', '/api/users/' . $id);
         return redirect('/auth');
     }
 
     public function emailCheck(Request $request)
     {
-        if ($this->userService->exists($request->email)) {
-//            return response('true', Response::HTTP_OK);
-            return response()->json([
-                'result' => 'true'
-            ]);
+        $userStatus = $this->userService->exists($request->email);
+
+        switch ($userStatus) {
+            case 0:
+                return response('Email is already exist', Response::HTTP_CONFLICT);
+            case 1:
+                return response('This email is usable', Response::HTTP_OK);
+            case -1:
+                return response('This email is exist. but It has been deleted.', Response::HTTP_GONE);
         }
-//        return response('false', Response::HTTP_OK);
-        return response()->json([
-            'result' => 'false'
-        ]);
+
+
+
+//            return response()->json(['result' => 'true'], Response::HTTP_CONFLICT);
+
+
+//        return response()->json(['result' => 'false'], Response::HTTP_OK);
     }
 
     /**
@@ -88,6 +95,12 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+//        Log::info($user);
+//        return response()->json(['message' => 'success']);
+        $this->authorize('edit', $user);
+        $user->delete();
+
+        auth()->logout();
+        return redirect()->route('index');
     }
 }
