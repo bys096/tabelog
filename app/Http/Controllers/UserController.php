@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Domain\Models\User;
 use App\Domain\Services\UserService;
+use App\Enums\UserStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,23 +48,25 @@ class UserController extends Controller
 
     public function emailCheck(Request $request)
     {
-        $userStatus = $this->userService->exists($request->email);
+        $userStatus = $this->userService->checkEmailStatus($request->email);
 
         switch ($userStatus) {
-            case 0:
+//            もう登録済みのEmail
+            case UserStatus::USER_EXIST:
                 return response('Email is already exist', Response::HTTP_CONFLICT);
-            case 1:
+
+//            登録可能なEmail
+            case UserStatus::USER_AVAILABLE:
                 return response('This email is usable', Response::HTTP_OK);
-            case -1:
+
+//            削除され、登録できないEmail
+            case UserStatus::USER_DELETED:
                 return response('This email is exist. but It has been deleted.', Response::HTTP_GONE);
+
+//                その他、予測できないErrorが発生した際
+            default:
+                return response('An unexpected error occurred', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-
-
-//            return response()->json(['result' => 'true'], Response::HTTP_CONFLICT);
-
-
-//        return response()->json(['result' => 'false'], Response::HTTP_OK);
     }
 
     /**
