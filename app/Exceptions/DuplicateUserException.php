@@ -2,40 +2,28 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Contracts\View\View;
-use RuntimeException;
+use App\Enums\ErrorCode;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
+use Exception;
 
-
-class DuplicateUserException extends RuntimeException implements Responsable
+class DuplicateUserException extends Exception
 {
-    protected $error = 'Duplicate User Exception';
-    private $factory;
-    protected $code;
+    private $errorCode;
 
-    public function __construct(
-        View $factory,
-        string $message = "",
-        $code = 0,
-        Throwable $previous = null
-    ) {
-        $this->factory = $factory;
-        $this->code = $code;
-        parent::__construct($message, $code, $previous);
-    }
-
-    public function toResponse($request): Response
+    public function __construct(string $message = "", int $code = 0, ?Throwable $previous = null)
     {
-        return new Response(
-//            $this->factory->with($this->error, $this->message)
-            $this->factory->with([
-                'error' => $this->error,
-                'message' => $this->message,
-                'code' => $this->code
-            ])
-        );
-
+        $error = ErrorCode::DUPLICATE_USER_EXCEPTION;
+        $this->errorCode = $error->errorCode();
+        parent::__construct($error->message(), Response::HTTP_CONFLICT, $previous);
     }
+
+    /**
+     * @return string
+     */
+    public function getErrorCode(): string
+    {
+        return $this->errorCode;
+    }
+
 }

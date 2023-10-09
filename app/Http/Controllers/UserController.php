@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Domain\Models\User;
 use App\Domain\Services\UserService;
 use App\Enums\UserStatus;
+use App\Exceptions\DuplicateUserException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,12 +38,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        if ($this->userService->exists($request->email)) {
-            return response('', Response::HTTP_OK);
+        if ($this->userService->checkEmailStatus($request->email) == UserStatus::USER_EXIST) {
+            throw new DuplicateUserException;
         }
 
-        $id = $this->userService->store($request->username, $request->email, $request->password);
-//        return response('', Response::HTTP_CREATED)->header('Location', '/api/users/' . $id);
+        $this->userService->store($request->username, $request->email, $request->password);
         return redirect('/auth');
     }
 
