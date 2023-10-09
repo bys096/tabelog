@@ -3,27 +3,35 @@
 namespace App\Exceptions;
 
 use App\Enums\ErrorCode;
+use Illuminate\Contracts\Support\Responsable;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use Exception;
 
-class DuplicateUserException extends Exception
+class DuplicateUserException extends Exception implements Responsable
 {
     private $errorCode;
+    private $error;
 
     public function __construct(string $message = "", int $code = 0, ?Throwable $previous = null)
     {
-        $error = ErrorCode::DUPLICATE_USER_EXCEPTION;
-        $this->errorCode = $error->errorCode();
-        parent::__construct($error->message(), Response::HTTP_CONFLICT, $previous);
+        $this->error = ErrorCode::DUPLICATE_USER_EXCEPTION;
+        $this->errorCode = $this->error->errorCode();
+        parent::__construct($this->error->message(), Response::HTTP_CONFLICT, $previous);
     }
 
-    /**
-     * @return string
-     */
-    public function getErrorCode(): string
+//    public function getErrorCode(): string
+//    {
+//        return $this->errorCode;
+//    }
+
+    public function toResponse($request): Response
     {
-        return $this->errorCode;
+        return response()->json([
+            'code' => Response::HTTP_CONFLICT,
+            'error_code' => $this->error->errorCode(),
+            'message' => $this->error->message(),
+//            'errors' => $this->errors()
+        ]);
     }
-
 }

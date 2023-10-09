@@ -29,22 +29,18 @@ class UserService
         } else if ($user->trashed()) {
             return UserStatus::USER_DELETED;
         } else {
+//            throw new DuplicateUserException();
             return UserStatus::USER_EXIST;
         }
     }
 
     public function store(string $name, string $email, string $password): int
     {
-        return $this->userRepository->store(new User(null, $name, $email, $password));
-//        try {
-//        } catch (QueryException $e) {
-//            $errorCode = $e->getCode();
-//            Log::info('Query Exception Occured. error-code: ' . $errorCode);
-//            if ($errorCode == 23000) {
-//                throw new DuplicateUserException(view('errors.page'), 'Duplicate User Error', $errorCode);
-//            }
-//        }
-//        return 0;
+        try {
+            return $this->userRepository->store(new User(null, $name, $email, $password));
+        } catch (QueryException) {
+            throw new DuplicateUserException;
+        }
     }
 
 }

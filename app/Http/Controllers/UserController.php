@@ -6,8 +6,10 @@ use App\Domain\Models\User;
 use App\Domain\Services\UserService;
 use App\Enums\UserStatus;
 use App\Exceptions\DuplicateUserException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -38,12 +40,9 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        if ($this->userService->checkEmailStatus($request->email) == UserStatus::USER_EXIST) {
-            throw new DuplicateUserException;
-        }
-
         $this->userService->store($request->username, $request->email, $request->password);
         return redirect('/auth');
+
     }
 
     public function emailCheck(Request $request)

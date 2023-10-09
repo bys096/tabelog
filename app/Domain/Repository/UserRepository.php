@@ -5,6 +5,8 @@ namespace App\Domain\Repository;
 use App\Domain\Entity\User;
 use App\Domain\Models\User as EloquentUser;
 use App\Domain\Repository\UserRepositoryInterface;
+use App\Exceptions\DuplicateUserException;
+use Illuminate\Database\QueryException;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -28,7 +30,10 @@ class UserRepository implements UserRepositoryInterface
         $eloquent->name = $user->getName();
         $eloquent->email = $user->getEmail();
         $eloquent->password = $user->getPassword();
+
+
         $eloquent->save();
+
 
         return (int) $eloquent->id;
     }
