@@ -7,6 +7,8 @@ use App\Domain\DTO\DiaryUpdateRequestDTO;
 use App\Domain\Entity\Diary;
 use App\Domain\Models\Diary as EloquentDiary;
 use App\Domain\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class DiaryRepository implements DiaryRepositoryInterface
 {
@@ -36,15 +38,15 @@ class DiaryRepository implements DiaryRepositoryInterface
         );
     }
 
-    public function storeDiary(User $user, DiaryStoreRequestDTO $dto): int
+    public function storeDiary(User $user): int
     {
 //        $eloquent = $this->eloquentDiary->newInstance();
 //        $eloquent->title = $diaries->getTitle();
 //        $eloquent->content = $diaries->getContent();
 //        $eloquent->save();
-        $newDiary = $user->diaries()->create([
-            'title' => $dto->getTitle(),
-            'content' => $dto->getContent()
+        $newDiary = $this->eloquentDiary->create([
+            'date' => Carbon::now()->toDateString(),
+            'user_id' => $user->id
         ]);
 
         return $newDiary->id;
@@ -65,5 +67,14 @@ class DiaryRepository implements DiaryRepositoryInterface
     public function findById(int $diaryId)
     {
         return $this->eloquentDiary->where('id', $diaryId)->first();
+    }
+
+
+    public function findByCreatedAt(string $date)
+    {
+        Log::info('repository find 중: ' . $date);
+
+        $diary = $this->eloquentDiary->where('date', $date)->first();
+        return $diary;
     }
 }

@@ -42,7 +42,6 @@ class UserController extends Controller
     {
         $this->userService->store($request->username, $request->email, $request->password);
         return redirect('/auth');
-
     }
 
     public function emailCheck(Request $request)

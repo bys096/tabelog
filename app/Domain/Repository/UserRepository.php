@@ -24,16 +24,14 @@ class UserRepository implements UserRepositoryInterface
     }
 
 
+//    会員登録 Method
     public function store(User $user): int
     {
         $eloquent = $this->eloquentUser->newInstance();
         $eloquent->name = $user->getName();
         $eloquent->email = $user->getEmail();
         $eloquent->password = $user->getPassword();
-
-
         $eloquent->save();
-
 
         return (int) $eloquent->id;
     }

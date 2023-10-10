@@ -10,8 +10,10 @@ class Diary extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;                     // UpdatedAt,CreatedAtを使わないなら、必ずFalseを付与します。
+
     protected $fillable = [
-        'title', 'content', 'user_id'
+        'date', 'user_id'
     ];
 
     public function user()
@@ -27,5 +29,10 @@ class Diary extends Model
     public function diaryFiles()
     {
         return $this->hasMany(DiaryFile::class);
+    }
+
+    public function diarySegments()
+    {
+        return $this->hasMany(DiarySegment::class);
     }
 }

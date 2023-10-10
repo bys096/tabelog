@@ -19,7 +19,7 @@ use App\Http\Controllers\DiaryController;
 
 
 // Home
-Route::get('/dashboard', [HomeController::class, 'index'])->middleware('auth');
+Route::get('/dashboard', [HomeController::class, 'index'])->middleware('auth')->name('dashboard');
 
 // User
 Route::resource('/users', UserController::class);
@@ -38,6 +38,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/diaries', [DiaryController::class, 'store']);                         // Diary Save
     Route::delete('/diaries/{diaryId}', [DiaryController::class, 'destroy']);           // Diary Delete
     Route::patch('/diaries/{diaryId}', [DiaryController::class, 'update']);             // Diary Update
+    Route::post('/diaries/image', [DiaryController::class, 'saveImage']);
 });
 
 

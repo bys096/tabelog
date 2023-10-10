@@ -20,18 +20,13 @@ class DuplicateUserException extends Exception implements Responsable
         parent::__construct($this->error->message(), Response::HTTP_CONFLICT, $previous);
     }
 
-//    public function getErrorCode(): string
-//    {
-//        return $this->errorCode;
-//    }
-
+//    toResponseオーバーライドし、応答を定義します。
     public function toResponse($request): Response
     {
         return response()->json([
-            'code' => Response::HTTP_CONFLICT,
-            'error_code' => $this->error->errorCode(),
-            'message' => $this->error->message(),
-//            'errors' => $this->errors()
+            'code' => Response::HTTP_CONFLICT,              // HTTPコード
+            'error_code' => $this->error->errorCode(),      // custom エラーコード
+            'message' => $this->error->message(),           // error message
         ]);
     }
 }

@@ -30,26 +30,30 @@ class DiaryController extends Controller
     // 新しいDAIRYの作成
     public function store(Request $request)
     {
-//        $userId = auth()->id();
-//        $diaryDTO = new DiaryStoreRequestDTO();
-//        $diaryDTO->setTitle($request->input('title'));
-//        $diaryDTO->setContent($request->input('content'));
-//
-//        $this->diaryService->storeDiary($userId, $diaryDTO);
+        $userId = auth()->id();
+        Log::info('Controller: '. $userId);
+        Log::info('Controller: ' . $request->input('content'));
+        $diaryDTO = new DiaryStoreRequestDTO(
+            'title',
+            $request->input('content')
+        );
 
+        $this->diaryService->storeDiary($userId, $diaryDTO);
+        return redirect()->route('dashboard');
 
+    }
+
+    public function saveImage(Request $request)
+    {
+        Log::info('diarySave method');
         if ($request->hasFile('image')) {
-            Log::info($request->file('image'));
-            $fileName = time().'_'.$request -> file('image') -> getClientOriginalName();
+            $fileName = time().'_'.$request->file('image')->getClientOriginalName();
             Log::info($fileName);
-            $path = $request -> file('image') -> storeAs('public/images', $fileName);
-
+            $imagePath = $request->file('image')->storeAs('public/images', $fileName);
             return response()->json([
-               "imageUrl" => 'http://localhost:8090/storage/images/' . $fileName
+                "imageUrl" => 'http://localhost:8090/storage/images/' . $fileName
             ]);
-
         }
-
     }
 
     // Diary削除

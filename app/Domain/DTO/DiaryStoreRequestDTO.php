@@ -9,9 +9,34 @@ class DiaryStoreRequestDTO
     private $title;
     private $content;
 
-    public function __construct()
+    private $diaryId;
+
+    /**
+     * @return mixed
+     */
+    public function getDiaryId()
     {
+        return $this->diaryId;
     }
+
+    /**
+     * @param mixed $diaryId
+     */
+    public function setDiaryId($diaryId): void
+    {
+        $this->diaryId = $diaryId;
+    }
+
+    /**
+     * @param $title
+     * @param $content
+     */
+    public function __construct($title, $content)
+    {
+        $this->title = $title;
+        $this->content = $content;
+    }
+
 
     /**
      * @return mixed
