@@ -70,11 +70,10 @@ class DiaryRepository implements DiaryRepositoryInterface
     }
 
 
-    public function findByCreatedAt(string $date)
+    public function findByDateAndUserId(string $date, int $userId)
     {
-        Log::info('repository find 중: ' . $date);
-
-        $diary = $this->eloquentDiary->where('date', $date)->first();
+        $diary = $this->eloquentDiary->where('date', $date)->where('user_id', $userId)->first();
+        Log::info('found diaries: ' . json_encode($diary));
         return $diary;
     }
 }

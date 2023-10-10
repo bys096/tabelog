@@ -23,5 +23,5 @@ interface DiaryRepositoryInterface
 
     public function findById(int $diaryId);
 
-    public function findByCreatedAt(string $date);
+    public function findByDateAndUserId(string $date, int $userId);
 }

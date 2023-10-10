@@ -11,6 +11,8 @@ use App\Domain\Repository\UserRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+
 
 class DiaryService
 {
@@ -33,34 +35,34 @@ class DiaryService
 
     public function storeDiary(int $userId, DiaryStoreRequestDTO $dto)
     {
-
-//        Log::info('UserID' . $userId);
-        Log::info('date: ' . Carbon::now()->toDateString());
-        $diary = $this->diaryRepository->findByCreatedAt(Carbon::now()->toDateString());
-        Log::info('find result; ' . json_encode($diary));
-        if ($diary == null) {
+        return DB::transaction(function () use ($userId, $dto) {
             try {
-                Log::info('다이어리 미발견');
-                $user = $this->userRepository->findById($userId);
-                Log::info(json_encode($user));
-                $newDiary = $user->diaries()->create(['date' => Carbon::now()->toDateString()]);
-                $newSegment = $newDiary->diarySegments()->create([
+                $today = Carbon::now()->toDateString();
+
+                $diary = $this->diaryRepository->findByDateAndUserId($today, $userId);
+
+                if (!$diary) {
+                    $user = $this->userRepository->findById($userId);
+                    if (!$user) {
+                        Log::error("User with ID $userId not found.");
+                        throw new \Exception("User with ID $userId not found.");
+                    }
+
+                    $diary = $user->diaries()->create(['date' => $today]);
+                    Log::info('Created Diary: ' . json_encode($diary));
+                }
+
+                // Add a new segment to the diary
+                $diary->diarySegments()->create([
                     'content' => $dto->getContent(),
                     'meal_time' => 'afternoon'
                 ]);
-            } catch (QueryException $e) {
-                throw $e;
-            }
-        } else if($diary->date == Carbon::now()->toDateString()) {
-            try {
-                Log::info('diary 발견, diary Id: ' . $diary->user_id);
-//                Log::info('직렬화: ' . json_encode($diary));
 
-                $newSegment = $diary->diarySegments()->create(['content' => $dto->getContent(), 'meal_time' => 'afternoon']);
-            } catch (QueryException $e) {
-                throw $e;
+            } catch (\Exception $e) {
+                Log::error("Error storing diary entry: " . $e->getMessage());
+                throw $e;  // 여기서 예외를 다시 발생시켜서 DB::transaction에 의해 롤백이 일어나도록 합니다.
             }
-        }
+        }, 5);
 
     }
 
