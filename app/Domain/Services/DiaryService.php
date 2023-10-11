@@ -44,11 +44,10 @@ class DiaryService
                 if (!$diary) {
                     $user = $this->userRepository->findById($userId);
                     if (!$user) {
-                        Log::error("User with ID $userId not found.");
-                        throw new \Exception("User with ID $userId not found.");
+                        Log::error("User ID not found.");
                     }
 
-                    $diary = $user->diaries()->create(['date' => $today]);
+                    $diary = $user->diaries()->create(['date' => $dto->getDate()]);
                     Log::info('Created Diary: ' . json_encode($diary));
                 }
 
@@ -60,7 +59,6 @@ class DiaryService
 
             } catch (\Exception $e) {
                 Log::error("Error storing diary entry: " . $e->getMessage());
-                throw $e;  // 여기서 예외를 다시 발생시켜서 DB::transaction에 의해 롤백이 일어나도록 합니다.
             }
         }, 5);
 

@@ -6,52 +6,23 @@ use Carbon\Carbon;
 
 class DiaryStoreRequestDTO
 {
-    private $title;
-    private $content;
+    public $content;
+    public $diaryId;
 
-    private $diaryId;
+    public $date;
 
-    /**
-     * @return mixed
-     */
-    public function getDiaryId()
-    {
-        return $this->diaryId;
-    }
+    public $mealTime;
 
     /**
-     * @param mixed $diaryId
-     */
-    public function setDiaryId($diaryId): void
-    {
-        $this->diaryId = $diaryId;
-    }
-
-    /**
-     * @param $title
      * @param $content
+     * @param $date
+     * @param $mealTime
      */
-    public function __construct($title, $content)
+    public function __construct($content, $date, $mealTime)
     {
-        $this->title = $title;
         $this->content = $content;
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param mixed $title
-     */
-    public function setTitle($title): void
-    {
-        $this->title = $title;
+        $this->date = $date;
+        $this->mealTime = $mealTime;
     }
 
     /**
@@ -63,11 +34,27 @@ class DiaryStoreRequestDTO
     }
 
     /**
-     * @param mixed $content
+     * @return mixed
      */
-    public function setContent($content): void
+    public function getDiaryId()
     {
-        $this->content = $content;
+        return $this->diaryId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMealTime()
+    {
+        return $this->mealTime;
     }
 
 

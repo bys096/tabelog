@@ -31,12 +31,11 @@ class DiaryController extends Controller
     public function store(Request $request)
     {
         $userId = auth()->id();
-        Log::info('Controller: '. $userId);
-        Log::info('Controller: ' . $request->input('content'));
-        $diaryDTO = new DiaryStoreRequestDTO(
-            'title',
-            $request->input('content')
-        );
+        Log::info('date: ' . $request->input('date'));
+        Log::info('date: ' . $request->input('content'));
+        Log::info('date: ' . $request->input('meal_time'));
+        $diaryDTO = new DiaryStoreRequestDTO($request->input('content'), $request->input('date'), $request->input('meal_time'));
+        Log::info('Diary Accept: ' . json_encode($diaryDTO));
 
         $this->diaryService->storeDiary($userId, $diaryDTO);
         return redirect()->route('dashboard');

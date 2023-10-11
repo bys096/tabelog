@@ -16,42 +16,26 @@
 @section('content')
     {{--    Diary追加Modal    --}}
     <div class="create-modal" id="createModal">
-            <div x-data="select" class="relative w-[30rem]" @click.outside="open = false">
-                <button @click="toggle" :class="(open) && 'ring-blue-600'" class="flex w-full items-center justify-between rounded bg-white p-2 ring-1 ring-gray-300">
-                    <span x-text="(language == '') ? 'Choose language' : language"></span>
-                    <i class="fas fa-chevron-down text-xl"></i>
-                </button>
+        <div x-data="select" class="relative w-[30rem]" @click.outside="open = false">
+            <button @click="toggle" :class="(open) && 'ring-blue-600'" class="flex w-full items-center justify-between rounded bg-white p-2 ring-1 ring-gray-300">
+                <span x-text="(meal == '') ? 'Choose meal-time' : meal"></span>
+                <i class="fas fa-chevron-down text-xl"></i>
+            </button>
 
-                <ul class="z-2 absolute mt-1 w-full rounded bg-gray-50 ring-1 ring-gray-300" x-show="open">
-                    <li class="cursor-pointer select-none p-2 hover:bg-gray-200" @click="setLanguage('breakfast')">BreakFast</li>
-                    <li class="cursor-pointer select-none p-2 hover:bg-gray-200" @click="setLanguage('lunch')">Lunch</li>
-                    <li class="cursor-pointer select-none p-2 hover:bg-gray-200" @click="setLanguage('dinner')">Dinner</li>
-                    <li class="cursor-pointer select-none p-2 hover:bg-gray-200" @click="setLanguage('dessert')">Dessert</li>
-                </ul>
-            </div>
+            <ul class="z-2 absolute mt-1 w-full rounded bg-gray-50 ring-1 ring-gray-300" x-show="open">
+                <li class="cursor-pointer select-none p-2 hover:bg-gray-200" @click="setMeal('breakfast')">BreakFast</li>
+                <li class="cursor-pointer select-none p-2 hover:bg-gray-200" @click="setMeal('lunch')">Lunch</li>
+                <li class="cursor-pointer select-none p-2 hover:bg-gray-200" @click="setMeal('dinner')">Dinner</li>
+                <li class="cursor-pointer select-none p-2 hover:bg-gray-200" @click="setMeal('dessert')">Dessert</li>
+            </ul>
+        </div>
+        <input type="hidden" name="meal_time" id="meal_time" value="">
 
 
 
-        <script>
-            document.addEventListener("alpine:init", () => {
-                Alpine.data("select", () => ({
-                    open: false,
-                    language: "",
-
-                    toggle() {
-                        this.open = !this.open;
-                    },
-
-                    setLanguage(val) {
-                        this.language = val;
-                        this.open = false;
-                    },
-                }));
-            });
-        </script>
         <div class="">
-            <label for="Birthday" class="block text-sm text-gray-500 dark:text-gray-300">Birthday</label>
-            <input type="date" placeholder="John Doe" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+            <label for="date" class="block text-sm text-gray-500 dark:text-gray-300">Date</label>
+            <input type="date" id="date" placeholder="John Doe" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
         </div>
         <button class="modal-close-btn" id="modalCloseBtn">Close</button>
         {{--    Editor  --}}
@@ -215,7 +199,12 @@
 
             console.log(editor.getMarkdown());
             // console.log(typeof(editor.getMarkdown()));
-            const data = { content: editor.getMarkdown() };
+            const data = {
+                content: editor.getMarkdown(),
+                meal_time: $('#meal_time').val(),
+                date: $('#date').val()
+            };
+            console.log(data);
 
             try {
                 const response = await axios.post(`/diaries`, data);
@@ -223,9 +212,28 @@
             } catch(e) {
                 console.log(e);
             }
+        });
 
+        document.addEventListener("alpine:init", () => {
+            Alpine.data("select", () => ({
+                open: false,
+                meal: "",
 
+                toggle() {
+                    this.open = !this.open;
+                },
 
+                setMeal(val) {
+                    this.meal = val;
+                    this.open = false;
+                    this.getSelectedValue();
+                },
+
+                getSelectedValue() {
+                    document.getElementById('meal_time').value = this.meal;
+                    console.log(document.getElementById('meal_time').value);
+                },
+            }));
         });
     </script>
 @endsection
