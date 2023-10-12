@@ -313,7 +313,7 @@
 
         $('#diary-save-btn').click(async function () {
             console.log('click');
-            console.log('arr');
+            console.log(arr);
             $('#contentInput').val(editor.getMarkdown());
             $('#hashTagList').val(JSON.stringify(arr));
             const form = document.getElementById('diarySubmitForm');
@@ -343,31 +343,46 @@
         })
 
         let arr = [];
+        let badgeIndex = 0;
         $('#tagInput').keypress(function (e) {
             let inputText = $('#tagInput').val();
             if(e.keyCode && e.keyCode == 13){
                 const badgeHTML = `
-                <span id="badge-dismiss-purple" class="inline-flex items-center px-2 py-1 mr-2 text-sm font-medium text-purple-800 bg-purple-100 rounded dark:bg-purple-900 dark:text-purple-300">
-                    ${inputText}
-                    <button type="button" class="inline-flex items-center p-1 ml-2 text-sm text-purple-400 bg-transparent rounded-sm hover:bg-purple-200 hover:text-purple-900 dark:hover:bg-purple-800 dark:hover:text-purple-300" data-dismiss-target="#badge-dismiss-purple" aria-label="Remove">
+                <span id="badge-${badgeIndex}" class="inline-flex items-center px-2 py-1 mr-2 text-sm font-medium text-purple-800 bg-purple-100 rounded dark:bg-purple-900 dark:text-purple-300">
+                    <span id="badge-text-${badgeIndex}">${inputText}</span>
+                    <button onclick="removeBadge('${badgeIndex}')" type="button" class="inline-flex items-center p-1 ml-2 text-sm text-purple-400 bg-transparent rounded-sm hover:bg-purple-200 hover:text-purple-900 dark:hover:bg-purple-800 dark:hover:text-purple-300" data-dismiss-target="#badge-dismiss-purple" aria-label="Remove">
                         <svg class="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                         </svg>
                         <span class="sr-only">Remove badge</span>
                     </button>
                 </span>
-            `;
+                `;
                 document.getElementById('badges-container').innerHTML += badgeHTML;
+                badgeIndex++;
                 arr.push(inputText);
             }
         });
 
+        function removeBadge(badgeIndex) {
+            const badgeElement = document.getElementById(`badge-${badgeIndex}`);
+            const badgeText = badgeElement.querySelector(`#badge-text-${badgeIndex}`).innerText;
+            console.log(badgeElement)
+            console.log(`text: ${badgeText}`);
+            // alert(`${badgeId}, ${badgeText}`);
+            if (badgeElement) {
+                badgeElement.remove();
+                arr = arr.filter(item => item !== badgeText);
+                console.log('삭제 후 arr');
+                console.log(arr);
+            }
+            // arr.remove(`badge-${badgeIndex}`);
+        }
         $('document').ready(function () {
             console.log('ready');
             console.log(@json($diaries));
             // console.log(a);
         });
-
 
     </script>
 @endsection
