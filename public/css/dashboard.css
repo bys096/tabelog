@@ -224,7 +224,8 @@ input:checked + .slider:before {
     cursor: pointer;
     transition: 0.3s;
     position: relative;
-    right: 2vw;
+    right: 4vw;
+    top: 1.5vh;
 }
 .main-header__add:hover {
     background-color: #e4361a;
@@ -271,13 +272,16 @@ input:checked + .slider:before {
 .card {
     border-radius: 20px;
     overflow: hidden;
-    max-width: 90%;
+    max-width: 80%;
     contain: layout;
     position: relative;
     z-index: 1;
     cursor: pointer;
     width: auto;
     aspect-ratio: 1/1;
+    top: 3vh;
+    margin-bottom: 2vh;
+    /*margin-bottom: 10px;*/
 }
 @media (max-width: 480px) {
     .card {
@@ -410,3 +414,13 @@ input:checked + .slider:before {
     gap: 10px;
 }
 
+.diary-date {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main {
+    overflow: hidden;
+}

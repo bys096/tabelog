@@ -124,8 +124,8 @@
             <div id="content"></div>
             <div class="btn-group">
                 <div class="flex justify-end overflow-hidden bg-white border divide-x rounded-lg rtl:flex-row-reverse dark:bg-gray-900 dark:border-gray-700 dark:divide-gray-700">
-{{--                    <button onclick="axios.get('{{ route('test2') }}')"--}}
-                        <button class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-base sm:px-6 dark:hover:bg-gray-800 dark:text-gray-300 gap-x-3 hover:bg-gray-100">
+                    {{--                    <button onclick="axios.get('{{ route('test2') }}')"--}}
+                    <button class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-base sm:px-6 dark:hover:bg-gray-800 dark:text-gray-300 gap-x-3 hover:bg-gray-100">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 sm:w-6 sm:h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
                         </svg>
@@ -183,12 +183,20 @@
 
                 {{--        검색 기능 추가 필요         --}}
                 <div class="main-content">
-                    <div class="card card-2 card-img"></div>
-                    <div class="card card-3 card-img"></div>
-                    <div class="card card-img card-1 card-main"></div>
-                    <div class="card card-4 card-img"></div>
-                    <div class="card card-img card-5"></div>
-                    <div class="card card-6 card-img"></div>
+                    @foreach($diaries as $diary)
+{{--                        <div>--}}
+
+                            <div class="card card-{{ $loop->iteration }} card-img">
+                                <div class="diary-date">{{ $diary->date }}</div>
+                            </div>
+{{--                        </div>--}}
+                    @endforeach
+{{--                    <div class="card card-2 card-img"></div>--}}
+{{--                    <div class="card card-3 card-img"></div>--}}
+{{--                    <div class="card card-img card-1 card-main"></div>--}}
+{{--                    <div class="card card-4 card-img"></div>--}}
+{{--                    <div class="card card-img card-5"></div>--}}
+{{--                    <div class="card card-6 card-img"></div>--}}
                 </div>
             </div>
         </div>
@@ -352,6 +360,12 @@
                 document.getElementById('badges-container').innerHTML += badgeHTML;
                 arr.push(inputText);
             }
+        });
+
+        $('document').ready(function () {
+            console.log('ready');
+            console.log(@json($diaries));
+            // console.log(a);
         });
 
 

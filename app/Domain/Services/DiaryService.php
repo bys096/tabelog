@@ -4,6 +4,7 @@ namespace App\Domain\Services;
 
 use App\Domain\DTO\DiaryStoreRequestDTO;
 use App\Domain\DTO\DiaryUpdateRequestDTO;
+use App\Domain\Models\Diary;
 use App\Domain\Models\DiarySegment;
 use App\Domain\Repository\DiaryRepositoryInterface;
 use App\Domain\Repository\DiarySegmentRepository;
@@ -33,7 +34,7 @@ class DiaryService
 
     public function findDiaries(int $userId)
     {
-        return $this->diaryRepository->findByUserId($userId);
+        return Diary::where('user_id', $userId)->get();
     }
 
     public function storeDiary(int $userId, DiaryStoreRequestDTO $dto)

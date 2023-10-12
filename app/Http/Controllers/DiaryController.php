@@ -22,7 +22,9 @@ class DiaryController extends Controller
     public function index()
     {
         $userId = auth()->id();
-        return $this->diaryService->findDiaries($userId);
+        $diaries = $this->diaryService->findDiaries($userId);
+        Log::info(json_encode($diaries));
+        return view('dashboard')->with('diaries', $diaries);
     }
 
 
@@ -35,6 +37,8 @@ class DiaryController extends Controller
             $request->input('date'),
             $request->input('meal_time'),
             json_decode($request->input('hashTagList')));
+        Log::info(json_encode($diaryDTO->getHashTagList()));
+
         $this->diaryService->storeDiary($userId, $diaryDTO);
 
         return redirect()->route('dashboard');

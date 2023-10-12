@@ -34,7 +34,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (auth()->attempt($credentials)) {
-            return redirect()->intended('/dashboard');
+            return redirect()->intended(route('diary.index'));
         }
         Log::info('erorrs occurs');
         return back()->withErrors([

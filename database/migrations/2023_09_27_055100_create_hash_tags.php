@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('hash_tags', function (Blueprint $table) {
             $table->id();
-            $table->string('tag_name', '10')->index();
+            $table->string('tag_name', '15')->index();
             $table->timestamps();
         });
     }
