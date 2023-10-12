@@ -73,7 +73,7 @@ class DiaryRepository implements DiaryRepositoryInterface
     public function findByDateAndUserId(string $date, int $userId)
     {
         $diary = $this->eloquentDiary->where('date', $date)->where('user_id', $userId)->first();
-        Log::info('found diaries: ' . json_encode($diary));
+        Log::info('userId '.$userId . 'found diaries: ' . json_encode($diary));
         return $diary;
     }
 }

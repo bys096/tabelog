@@ -23,23 +23,21 @@ class DiaryController extends Controller
     {
         $userId = auth()->id();
         return $this->diaryService->findDiaries($userId);
-//        Log::info(serialize($record));
     }
 
 
-    // 新しいDAIRYの作成
+    // 新しいDiaryを作成
     public function store(Request $request)
     {
         $userId = auth()->id();
-        Log::info('date: ' . $request->input('date'));
-        Log::info('date: ' . $request->input('content'));
-        Log::info('date: ' . $request->input('meal_time'));
-        $diaryDTO = new DiaryStoreRequestDTO($request->input('content'), $request->input('date'), $request->input('meal_time'));
-        Log::info('Diary Accept: ' . json_encode($diaryDTO));
-
+        $diaryDTO = new DiaryStoreRequestDTO(
+            $request->input('content'),
+            $request->input('date'),
+            $request->input('meal_time'),
+            json_decode($request->input('hashTagList')));
         $this->diaryService->storeDiary($userId, $diaryDTO);
-        return redirect()->route('dashboard');
 
+        return redirect()->route('dashboard');
     }
 
     public function saveImage(Request $request)

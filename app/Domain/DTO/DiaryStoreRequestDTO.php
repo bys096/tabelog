@@ -13,17 +13,34 @@ class DiaryStoreRequestDTO
 
     public $mealTime;
 
+    public $hashTagList;
+
     /**
      * @param $content
      * @param $date
      * @param $mealTime
+     * @param $hashTagList
      */
-    public function __construct($content, $date, $mealTime)
+    public function __construct($content, $date, $mealTime, $hashTagList)
     {
         $this->content = $content;
         $this->date = $date;
         $this->mealTime = $mealTime;
+        $this->hashTagList = $hashTagList;
     }
+
+
+    /**
+     * @return mixed
+     */
+    public function getHashTagList()
+    {
+        return $this->hashTagList;
+    }
+
+
+
+
 
     /**
      * @return mixed

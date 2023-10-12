@@ -13,8 +13,8 @@ class HashTag extends Model
         'tag_name'
     ];
 
-    public function diaries()
+    public function diarySegments()
     {
-        return $this->belongsToMany(Diary::class);
+        return $this->belongsToMany(DiarySegment::class);
     }
 }

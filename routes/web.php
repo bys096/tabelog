@@ -35,13 +35,20 @@ Route::group(['prefix' => '/auth'], function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/diaries', [DiaryController::class, 'index']);                          // Diary List
-    Route::post('/diaries', [DiaryController::class, 'store']);                         // Diary Save
+    Route::post('/diaries', [DiaryController::class, 'store'])->name('diary.save');                         // Diary Save
     Route::delete('/diaries/{diaryId}', [DiaryController::class, 'destroy']);           // Diary Delete
     Route::patch('/diaries/{diaryId}', [DiaryController::class, 'update']);             // Diary Update
     Route::post('/diaries/image', [DiaryController::class, 'saveImage']);
 });
 
 
-Route::get('/test', function () {
-    return view("test");
-});
+Route::get('/test', function (\Illuminate\Http\Request $request) {
+    $list = $request->input('list');
+    if($request->input('list') == null) $list = [1, 2, 3, 4, 5];
+    $a = [];
+//    return view("test", ['a' => $a]);
+    return view('test', ['list' => $list,]);
+})->name('test');
+Route::get('/test2', function () {
+    return view("dashboard");
+})->name('test2');

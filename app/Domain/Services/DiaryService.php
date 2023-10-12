@@ -20,12 +20,15 @@ class DiaryService
     private $diarySegmentRepository;
     private $userRepository;
 
+    private $hashTagService;
+
     public function __construct(DiaryRepositoryInterface $diaryRepository, UserRepositoryInterface $userRepository,
-                DiarySegmentRepository $diarySegmentRepository)
+                DiarySegmentRepository $diarySegmentRepository, HashTagService $hashTagService)
     {
         $this->diaryRepository = $diaryRepository;
         $this->userRepository = $userRepository;
         $this->diarySegmentRepository = $diarySegmentRepository;
+        $this->hashTagService = $hashTagService;
     }
 
     public function findDiaries(int $userId)
@@ -35,13 +38,12 @@ class DiaryService
 
     public function storeDiary(int $userId, DiaryStoreRequestDTO $dto)
     {
+//        Diary作成に伴うDiary SegmentとHashTagもTransactionに括り処理
         return DB::transaction(function () use ($userId, $dto) {
             try {
-                $today = Carbon::now()->toDateString();
+                $diary = $this->diaryRepository->findByDateAndUserId($dto->getDate(), $userId);
 
-                $diary = $this->diaryRepository->findByDateAndUserId($today, $userId);
-
-                if (!$diary) {
+                if (!$diary) {      // 送られてきた日付で作成されたDiaryがなければ、新しいDiaryを作成してからSegmentを作成
                     $user = $this->userRepository->findById($userId);
                     if (!$user) {
                         Log::error("User ID not found.");
@@ -51,14 +53,18 @@ class DiaryService
                     Log::info('Created Diary: ' . json_encode($diary));
                 }
 
-                // Add a new segment to the diary
-                $diary->diarySegments()->create([
+                $newSegment = $diary->diarySegments()->create([
                     'content' => $dto->getContent(),
-                    'meal_time' => 'afternoon'
+                    'meal_time' => $dto->getMealTime()
                 ]);
+                Log::info('New diary segment has been created.' . $newSegment);
+
+                $this->hashTagService->registerHashTags($dto, $newSegment->id);
+                return true;
 
             } catch (\Exception $e) {
                 Log::error("Error storing diary entry: " . $e->getMessage());
+                throw $e;
             }
         }, 5);
 

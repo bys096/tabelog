@@ -20,4 +20,9 @@ class DiarySegment extends Model
         return $this->belongsTo(Diary::class);
     }
 
+    public function hashTags()
+    {
+        return $this->belongsToMany(HashTag::class);
+    }
+
 }
