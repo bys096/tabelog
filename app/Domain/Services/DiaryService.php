@@ -34,7 +34,7 @@ class DiaryService
 
     public function findDiaries(int $userId)
     {
-        return Diary::where('user_id', $userId)->get();
+        return Diary::where('user_id', $userId)->orderBy('date', 'desc')->paginate(6);
     }
 
     public function storeDiary(int $userId, DiaryStoreRequestDTO $dto)
