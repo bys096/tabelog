@@ -368,7 +368,7 @@ input:checked + .slider:before {
     background-color: white;
     visibility: hidden;
     position: absolute;
-    z-index: 3;
+    z-index: 1200 !important;
     border-radius: 40px;
     overflow: scroll;
     /*left: 50vw;*/

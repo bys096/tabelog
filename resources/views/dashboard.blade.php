@@ -118,14 +118,15 @@
                 </div>
             </form>
 
-            <button class="modal-close-btn" id="modalCloseBtn">Close</button>
+{{--            <button class="modal-close-btn" id="modalCloseBtn">Close</button>--}}
 
             {{--    Editor  --}}
             <div id="content"></div>
             <div class="btn-group">
                 <div class="flex justify-end overflow-hidden bg-white border divide-x rounded-lg rtl:flex-row-reverse dark:bg-gray-900 dark:border-gray-700 dark:divide-gray-700">
                     {{--                    <button onclick="axios.get('{{ route('test2') }}')"--}}
-                    <button class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-base sm:px-6 dark:hover:bg-gray-800 dark:text-gray-300 gap-x-3 hover:bg-gray-100">
+                    <button onclick="toggleDiaryModal();" class="flex items-center px-4 py-2 text-sm font-medium text-gray-600 transition-colors duration-200 sm:text-base sm:px-6 dark:hover:bg-gray-800 dark:text-gray-300 gap-x-3 hover:bg-gray-100"
+                            >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 sm:w-6 sm:h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
                         </svg>
@@ -297,6 +298,7 @@
             // initialValue: '내용을 입력해 주세요.',     // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
             previewStyle: 'vertical',                // 마크다운 프리뷰 스타일 (tab || vertical),
             placeholder: '内容を入力してください。',
+            hideModeSwitch: true,
             // theme: 'dark',
 
             hooks: {
@@ -327,10 +329,13 @@
             const diaryAddModal = $('#createModal');
 
             if (diaryAddModal.css('visibility') === 'hidden') {
-                diaryAddModal.css('z-index', '2');
                 diaryAddModal.css('visibility', 'visible');
+                diaryAddModal.attr('style', 'z-index: 1200 !important');
             } else {
-                diaryAddModal.css('visibility', 'hidden');
+                // diaryAddModal.style.setProperty('visibility', 'hidden', 'important');
+                diaryAddModal.attr('style', 'visibility: hidden !important');
+                // diaryAddModal.css('visibility', 'hidden');
+
                 diaryAddModal.css('z-index', '-1');
             }
         });
@@ -346,7 +351,7 @@
                 diaryAddModal.css('z-index', '-1');
             }
         }
-        $('#modalCloseBtn').click(toggleDiaryModal);
+        // $('#modalCloseBtn').click(toggleDiaryModal);
 
         document.addEventListener("alpine:init", () => {
             Alpine.data("select", () => ({
