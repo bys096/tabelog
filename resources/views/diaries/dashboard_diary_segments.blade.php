@@ -17,7 +17,7 @@
         .max-h-select {
             max-height: 300px;
         }
-        .toastui-editor-toolbar {
+        .main-content .toastui-editor-toolbar {
             display: none;
         }
     </style>
@@ -44,15 +44,7 @@
             <div class="hash-tags">
                 {{--    badge   --}}
                 <div id="badges-container">
-                    <span id="badge-dismiss-purple" class="inline-flex items-center px-2 py-1 mr-2 text-sm font-medium text-purple-800 bg-purple-100 rounded dark:bg-purple-900 dark:text-purple-300">
-                        Purple
-                        <button type="button" class="inline-flex items-center p-1 ml-2 text-sm text-purple-400 bg-transparent rounded-sm hover:bg-purple-200 hover:text-purple-900 dark:hover:bg-purple-800 dark:hover:text-purple-300" data-dismiss-target="#badge-dismiss-purple" aria-label="Remove">
-                            <svg class="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                            </svg>
-                            <span class="sr-only">Remove badge</span>
-                        </button>
-                    </span>
+
                 </div>
 
                 {{--    HashTags Input    --}}
@@ -125,7 +117,7 @@
             <button class="modal-close-btn" id="modalCloseBtn">Close</button>
 
             {{--    Editor  --}}
-{{--            <div id="content"></div>--}}
+                <div id="content"></div>
             <div class="btn-group">
                 <div class="flex justify-end overflow-hidden bg-white border divide-x rounded-lg rtl:flex-row-reverse dark:bg-gray-900 dark:border-gray-700 dark:divide-gray-700">
                     {{--                    <button onclick="axios.get('{{ route('test2') }}')"--}}
@@ -301,6 +293,40 @@
         }
 
 
+        const editor = new toastui.Editor({
+            el: document.querySelector('#content'), // 에디터를 적용할 요소 (컨테이너)
+            height: '60vh',                        // 에디터 영역의 높이 값 (OOOpx || auto)
+            // width: '80vw',
+            initialEditType: 'markdown',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
+            // initialValue: '내용을 입력해 주세요.',     // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
+            previewStyle: 'vertical',                // 마크다운 프리뷰 스타일 (tab || vertical),
+            placeholder: '内容を入力してください。',
+            // theme: 'dark',
+
+            hooks: {
+                async addImageBlobHook(blob, callback) {
+                    const formData = new FormData();
+                    formData.append("image", blob);
+                    // formData.append("_method", "PATCH");
+                    console.log(formData);
+
+                    try {
+                        console.log('upload start');
+                        const res = await uploadDiaryImage(formData);
+                        // const res = axios.patch('/diaries/saveImage', {
+                        //     image: blob
+                        // });
+
+                        console.log('response data:');
+                        console.log(res);
+                        callback(res.data.imageUrl, `image`);
+                    } catch (err) {
+                        console.log(err);
+                    }
+                }
+            }
+        });
+
 
         $('#addBtn').click(function() {
             const diaryAddModal = $('#createModal');
@@ -430,7 +456,7 @@
             console.log(`iter: ` + iter);
             // alert('a');
             const text = segment.content;
-            const editor = new toastui.Editor({
+            const viewer = new toastui.Editor({
                 el: document.querySelector(`#segment-content-${iter}`), // 에디터를 적용할 요소 (컨테이너)
                 height: '100%',                        // 에디터 영역의 높이 값 (OOOpx || auto)
                 // width: '80vw',
