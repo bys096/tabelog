@@ -37,6 +37,11 @@ class DiaryService
         return Diary::where('user_id', $userId)->orderBy('date', 'desc')->paginate(6);
     }
 
+    public function findDiarySegmentsById(int $diaryId)
+    {
+        return DiarySegment::where('diary_id',$diaryId)->orderBy('updated_at', 'desc')->paginate(6);
+    }
+
     public function storeDiary(int $userId, DiaryStoreRequestDTO $dto)
     {
 //        Diary作成に伴うDiary SegmentとHashTagもTransactionに括り処理

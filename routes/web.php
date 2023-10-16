@@ -39,6 +39,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/diaries/{diaryId}', [DiaryController::class, 'destroy']);           // Diary Delete
     Route::patch('/diaries/{diaryId}', [DiaryController::class, 'update']);             // Diary Update
     Route::post('/diaries/image', [DiaryController::class, 'saveImage']);
+    Route::get('/diaries/{diaryId}', [DiaryController::class, 'show'])->name('diary.segments');
 });
 
 

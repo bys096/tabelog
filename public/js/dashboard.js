@@ -26,16 +26,16 @@ const cards = document.querySelectorAll(".card");
 const mainContent = document.querySelector(".main-content");
 
 cards.forEach(card => {
-    card.addEventListener("click", () => {
-        console.log("");
-        document.startViewTransition(() => {
-            if (!card.classList.contains('active')) {
-                mainContent.classList.add("expanded");
-                card.classList.add("active");
-            } else {
-                card.classList.remove("active");
-                mainContent.classList.remove("expanded");
-            }
-        });
-    });
+    // card.addEventListener("click", () => {
+    //     console.log("");
+    //     document.startViewTransition(() => {
+    //         if (!card.classList.contains('active')) {
+    //             mainContent.classList.add("expanded");
+    //             card.classList.add("active");
+    //         } else {
+    //             card.classList.remove("active");
+    //             mainContent.classList.remove("expanded");
+    //         }
+    //     });
+    // });
 });

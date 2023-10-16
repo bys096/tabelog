@@ -9,12 +9,16 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
     <link rel="stylesheet" href="https://nhn.github.io/tui.editor/latest/dist/cdn/theme/toastui-editor-dark.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/showdown@2.0.1/dist/showdown.min.js"></script>
 
     <style>
         .top-100 {top: 100%}
         .bottom-100 {bottom: 100%}
         .max-h-select {
             max-height: 300px;
+        }
+        .toastui-editor-toolbar {
+            display: none;
         }
     </style>
 @endsection
@@ -121,7 +125,7 @@
             <button class="modal-close-btn" id="modalCloseBtn">Close</button>
 
             {{--    Editor  --}}
-            <div id="content"></div>
+{{--            <div id="content"></div>--}}
             <div class="btn-group">
                 <div class="flex justify-end overflow-hidden bg-white border divide-x rounded-lg rtl:flex-row-reverse dark:bg-gray-900 dark:border-gray-700 dark:divide-gray-700">
                     {{--                    <button onclick="axios.get('{{ route('test2') }}')"--}}
@@ -185,10 +189,13 @@
 
                 {{--    Diary List  --}}
                 <div class="main-content">
-                    @foreach($diaries as $diary)
-                            <div class="card card-{{ $loop->iteration }} card-img">
-                                <div class="diary-date" onclick="location.href='{{ route('diary.segments', ['diaryId' => $diary->id]) }}'">{{ $diary->date }}</div>
+                    @foreach($diarySegments as $segment)
+                        <div class="card card-{{ $loop->iteration }} card-img" onclick="showEditor({{ $loop->iteration }}, {{ $segment }})">
+                            <div class="diary-date">{{ $segment->meal_time }} 日記</div>
+                            <div class="segment-content hidden" id="segment-content-{{ $loop->iteration }}">
+{{--                                    {{ $segment->content }}--}}
                             </div>
+                        </div>
                     @endforeach
                 </div>
             </div>
@@ -196,66 +203,66 @@
 
         {{--    Pagination  --}}
         <div class="pagination-container">
-            <div class="flex pagination">
-                {{--    First Page  --}}
-                @if($diaries->onFirstPage() === true)
-                    <a href="#" class="px-4 py-2 mx-1 text-gray-500 capitalize bg-white rounded-md cursor-not-allowed dark:bg-gray-800 dark:text-gray-600">
-                        <div class="flex items-center -mx-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
-                            </svg>
+        <div class="flex pagination">
+            {{--    First Page  --}}
+            @if($diarySegments->onFirstPage() === true)
+                <a href="#" class="px-4 py-2 mx-1 text-gray-500 capitalize bg-white rounded-md cursor-not-allowed dark:bg-gray-800 dark:text-gray-600">
+                    <div class="flex items-center -mx-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                        </svg>
 
-                            <span class="mx-1">
+                        <span class="mx-1">
+                        previous
+                    </span>
+                    </div>
+                </a>
+            @else
+                <a href="{{ $diarySegments->previousPageUrl() }}" class="px-4 py-2 mx-1 text-gray-700 capitalize bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
+                    <div class="flex items-center -mx-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                        </svg>
+                        <span class="mx-1">
                             previous
                         </span>
-                        </div>
-                    </a>
-                @else
-                    <a href="{{ $diaries->previousPageUrl() }}" class="px-4 py-2 mx-1 text-gray-700 capitalize bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
-                        <div class="flex items-center -mx-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
-                            </svg>
-                            <span class="mx-1">
-                                previous
-                            </span>
-                        </div>
-                    </a>
-                @endif
+                    </div>
+                </a>
+            @endif
 
-                @for($i = 1; $i <= $diaries->lastPage(); $i++)
-                    <a href="{{ $diaries->url($i) }}" class="hidden px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md sm:inline dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
-                        {{ $i }}
-                    </a>
-                @endfor
+            @for($i = 1; $i <= $diarySegments->lastPage(); $i++)
+                <a href="{{ $diarySegments->url($i) }}" class="hidden px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md sm:inline dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
+                    {{ $i }}
+                </a>
+            @endfor
 
-                {{--    Last Page   --}}
-                @if($diaries->onLastPage())
-                    <a href="{{ $diaries->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-500 cursor-not-allowed transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200">
-                        <div class="flex items-center -mx-1">
-                        <span class="mx-1" >
-                            Next
-                        </span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                        </div>
-                    </a>
-                @else
-                    <a href="{{ $diaries->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
-                        <div class="flex items-center -mx-1">
-                        <span class="mx-1" >
-                            Next
-                        </span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                        </div>
-                    </a>
+            {{--    Last Page   --}}
+            @if($diarySegments->onLastPage())
+                <a href="{{ $diarySegments->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-500 cursor-not-allowed transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200">
+                    <div class="flex items-center -mx-1">
+                    <span class="mx-1" >
+                        Next
+                    </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </div>
+                </a>
+            @else
+                <a href="{{ $diarySegments->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
+                    <div class="flex items-center -mx-1">
+                    <span class="mx-1" >
+                        Next
+                    </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </div>
+                </a>
 
-                @endif
-            </div>
+            @endif
         </div>
+    </div>
     </div>
 
 
@@ -266,10 +273,14 @@
 @section('script')
 
 
+
+
+
+
     {{--    diary modal: SELECT   --}}
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-    <script  src="{{ asset('js/dashboard.js') }}"></script>
+    <script  src="{{ asset('js/dashboard_segments.js') }}"></script>
     {{--    jquery  --}}
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
 
@@ -289,39 +300,7 @@
             }
         }
 
-        const editor = new toastui.Editor({
-            el: document.querySelector('#content'), // 에디터를 적용할 요소 (컨테이너)
-            height: '60vh',                        // 에디터 영역의 높이 값 (OOOpx || auto)
-            // width: '80vw',
-            initialEditType: 'markdown',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
-            // initialValue: '내용을 입력해 주세요.',     // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
-            previewStyle: 'vertical',                // 마크다운 프리뷰 스타일 (tab || vertical),
-            placeholder: '内容を入力してください。',
-            // theme: 'dark',
 
-            hooks: {
-                async addImageBlobHook(blob, callback) {
-                    const formData = new FormData();
-                    formData.append("image", blob);
-                    // formData.append("_method", "PATCH");
-                    console.log(formData);
-
-                    try {
-                        console.log('upload start');
-                        const res = await uploadDiaryImage(formData);
-                        // const res = axios.patch('/diaries/saveImage', {
-                        //     image: blob
-                        // });
-
-                        console.log('response data:');
-                        console.log(res);
-                        callback(res.data.imageUrl, `image`);
-                    } catch (err) {
-                        console.log(err);
-                    }
-                }
-            }
-        });
 
         $('#addBtn').click(function() {
             const diaryAddModal = $('#createModal');
@@ -439,13 +418,55 @@
         }
         $('document').ready(function () {
             console.log('ready');
-            console.log(@json($diaries));
-            console.log(`total record: {{ $diaries->total() }}`)
-            console.log(`current page: {{ $diaries->currentPage() }}`)
-            console.log(`total page: {{ $diaries->lastPage() }}`)
-            console.log(`next page url: {{ $diaries->nextPageUrl() }}`)
-            console.log(`previous page url: {{ $diaries->previousPageUrl() }}`)
+            console.log(@json($diarySegments));
+            console.log(`total record: {{ $diarySegments->total() }}`)
+            console.log(`current page: {{ $diarySegments->currentPage() }}`)
+            console.log(`total page: {{ $diarySegments->lastPage() }}`)
+            console.log(`next page url: {{ $diarySegments->nextPageUrl() }}`)
+            console.log(`previous page url: {{ $diarySegments->previousPageUrl() }}`)
         });
+
+        function showEditor(iter, segment) {
+            console.log(`iter: ` + iter);
+            // alert('a');
+            const text = segment.content;
+            const editor = new toastui.Editor({
+                el: document.querySelector(`#segment-content-${iter}`), // 에디터를 적용할 요소 (컨테이너)
+                height: '100%',                        // 에디터 영역의 높이 값 (OOOpx || auto)
+                // width: '80vw',
+                initialEditType: 'wysiwyg',            // 최초로 보여줄 에디터 타입 (markdown || wysiwyg)
+                initialValue: text,     // 내용의 초기 값으로, 반드시 마크다운 문자열 형태여야 함
+                previewStyle: 'vertical',                // 마크다운 프리뷰 스타일 (tab || vertical),
+                placeholder: '内容を入力してください。',
+                // theme: 'dark',
+                hideModeSwitch: true,
+                toolbarItems: [],
+
+                hooks: {
+                    async addImageBlobHook(blob, callback) {
+                        const formData = new FormData();
+                        formData.append("image", blob);
+                        // formData.append("_method", "PATCH");
+                        console.log(formData);
+
+                        try {
+                            console.log('upload start');
+                            const res = await uploadDiaryImage(formData);
+                            // const res = axios.patch('/diaries/saveImage', {
+                            //     image: blob
+                            // });
+
+                            console.log('response data:');
+                            console.log(res);
+                            callback(res.data.imageUrl, `image`);
+                        } catch (err) {
+                            console.log(err);
+                        }
+                    }
+                }
+            });
+            // console.log(editor.height);
+        }
 
     </script>
 @endsection

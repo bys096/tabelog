@@ -8,49 +8,19 @@
     <link rel="stylesheet" href="{{ asset('dist/css/tailwind.css') }}">
 
     <title>Document</title>
-    <style>
-        .top-100 {top: 100%}
-        .bottom-100 {bottom: 100%}
-        .max-h-select {
-            max-height: 300px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.css">
+
 </head>
 <body>
+<div id="viewer"></div>
 
-<input type="text" />
-<button onclick="addToArray()">Add to Array</button>
-<ul id="list">
-{{--    @foreach($list as $item)--}}
-{{--        <li>{{ $item }}</li>--}}
-{{--    @endforeach--}}
-</ul>
-
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.js"></script>
 <script>
-    let a = [];
+    const viewer = new toastui.EditorViewer({
+        el: document.querySelector('#viewer'),
+        initialValue: '# Hello Toast UI Viewer'
+    });
 
-    // a.push('New Item');  // 예를 들면 'New Item'을 추가합니다. 원하는 값으로 변경 가능합니다.
-    // renderList();
-    function addToArray() {
-        let n = 1;
-        a.push(n);
-        n += 1;
-        axios.get('{{ route('test') }}', a).then(function (response) {
-            console.log(response)
-        });
-    }
-
-    function renderList() {
-        const listElement = document.getElementById('list');
-        listElement.innerHTML = '';  // 기존 항목들을 지웁니다.
-
-        for (let item of a) {
-            const li = document.createElement('li');
-            li.textContent = item;
-            listElement.appendChild(li);
-        }
-    }
 </script>
 </body>
 </html>

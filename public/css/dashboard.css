@@ -427,10 +427,10 @@ input:checked + .slider:before {
 }
 
 .pagination {
-    position: relative;
+    /*position: relative;*/
     /*margin: 3vh;*/
-    left: 5.6vw;
-    top: 3vh;
+    /*left: 5.6vw;*/
+    /*top: 30px;*/
     /*height: 100%;*/
     /*min-width: 10px;*/
     /*min-height: 10px;*/
@@ -440,6 +440,21 @@ input:checked + .slider:before {
 
 footer {
     position: relative;
-    top: 3vh;
-    /*top: 8vh;*/
+    top: 130px;
+    /*top: 70px;*/
+}
+
+.pagination-container {
+    width: 100%;
+    display: flex;
+    /*flex-wrap: wrap;*/
+    position: relative;
+    justify-content: center;
+    top: 50px;
+    left: 6vw;
+    /*margin: 100px;*/
+}
+
+.hidden {
+    display: none;
 }

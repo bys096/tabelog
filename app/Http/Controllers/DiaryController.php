@@ -74,4 +74,10 @@ class DiaryController extends Controller
         $this->diaryService->updateDiary($diaryId, $dto);
     }
 
+    public function show(int $diaryId)
+    {
+        Log::info('show diary id ' . $diaryId);
+        $diarySegments = $this->diaryService->findDiarySegmentsById($diaryId);
+        return view('diaries.dashboard_diary_segments', ['diarySegments' => $diarySegments]);
+    }
 }
