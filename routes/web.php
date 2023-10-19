@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DiaryController;
+use App\Http\Controllers\SegmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/diaries/{diaryId}', [DiaryController::class, 'show'])->name('diary.segments');
 });
 
+Route::get('/diaries/segments/{segmentId}', [SegmentController::class, 'destroy']);
 
 Route::get('/test', function (\Illuminate\Http\Request $request) {
     $list = $request->input('list');

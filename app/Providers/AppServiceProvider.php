@@ -8,6 +8,8 @@ use App\Domain\Repository\DiarySegmentRepository;
 use App\Domain\Repository\DiarySegmentRepositoryInterface;
 use App\Domain\Repository\HashTagRepository;
 use App\Domain\Repository\HashTagRepositoryInterface;
+use App\Domain\Repository\SegmentRepository;
+use App\Domain\Repository\SegmentRepositoryInterface;
 use Fluent\Logger\FluentLogger;
 use Illuminate\Support\ServiceProvider;
 
@@ -36,6 +38,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             HashTagRepositoryInterface::class,
             HashTagRepository::class
+        );
+
+        $this->app->bind(
+            SegmentRepositoryInterface::class,
+            SegmentRepository::class
         );
 
         $this->app->singleton(FluentLogger::class, function () {

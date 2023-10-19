@@ -163,7 +163,7 @@
             </div>
             <div class="main">
                 <div class="main-header">
-                    <div class="main-header__title">Diary</div>
+                    <div class="main-header__title">{{ $diarySegments[0]->diary->date }}</div>
                     {{--            <div class="main-header__avatars">--}}
                     {{--                <button class="add-button"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">--}}
                     {{--                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>--}}
@@ -171,11 +171,18 @@
                     {{--            </div>--}}
 
                     {{--            버튼 아이콘 + -> 연필모양으로 변경 필요            --}}
+                    <div class="segment-btn-group hidden">
+                        <button class="">Modify</button>
+                        <button class="" onclick="deleteSegment();">Delete</button>
+                    </div>
                     <button class="main-header__add" id="addBtn">
                         <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
                         </svg>
                     </button>
+
+
+
                 </div>
 
                 {{--        검색 기능 추가 필요         --}}
@@ -188,74 +195,78 @@
                             <div class="segment-content hidden" id="segment-content-{{ $loop->iteration }}">
 {{--                                    {{ $segment->content }}--}}
                             </div>
+
                         </div>
                     @endforeach
                 </div>
+
             </div>
         </div>
 
         {{--    Pagination  --}}
         <div class="pagination-container">
-        <div class="flex pagination">
-            {{--    First Page  --}}
-            @if($diarySegments->onFirstPage() === true)
-                <a href="#" class="px-4 py-2 mx-1 text-gray-500 capitalize bg-white rounded-md cursor-not-allowed dark:bg-gray-800 dark:text-gray-600">
-                    <div class="flex items-center -mx-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
-                        </svg>
+            <div class="flex pagination">
+                {{--    First Page  --}}
+                @if($diarySegments->onFirstPage() === true)
+                    <a href="#" class="px-4 py-2 mx-1 text-gray-500 capitalize bg-white rounded-md cursor-not-allowed dark:bg-gray-800 dark:text-gray-600">
+                        <div class="flex items-center -mx-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                            </svg>
 
-                        <span class="mx-1">
-                        previous
-                    </span>
-                    </div>
-                </a>
-            @else
-                <a href="{{ $diarySegments->previousPageUrl() }}" class="px-4 py-2 mx-1 text-gray-700 capitalize bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
-                    <div class="flex items-center -mx-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
-                        </svg>
-                        <span class="mx-1">
+                            <span class="mx-1">
                             previous
                         </span>
-                    </div>
-                </a>
-            @endif
+                        </div>
+                    </a>
+                @else
+                    <a href="{{ $diarySegments->previousPageUrl() }}" class="px-4 py-2 mx-1 text-gray-700 capitalize bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
+                        <div class="flex items-center -mx-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                            </svg>
+                            <span class="mx-1">
+                                previous
+                            </span>
+                        </div>
+                    </a>
+                @endif
 
-            @for($i = 1; $i <= $diarySegments->lastPage(); $i++)
-                <a href="{{ $diarySegments->url($i) }}" class="hidden px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md sm:inline dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
-                    {{ $i }}
-                </a>
-            @endfor
+                @for($i = 1; $i <= $diarySegments->lastPage(); $i++)
+                    <a href="{{ $diarySegments->url($i) }}" class="hidden px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md sm:inline dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
+                        {{ $i }}
+                    </a>
+                @endfor
 
-            {{--    Last Page   --}}
-            @if($diarySegments->onLastPage())
-                <a href="{{ $diarySegments->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-500 cursor-not-allowed transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200">
-                    <div class="flex items-center -mx-1">
-                    <span class="mx-1" >
-                        Next
-                    </span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                    </div>
-                </a>
-            @else
-                <a href="{{ $diarySegments->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
-                    <div class="flex items-center -mx-1">
-                    <span class="mx-1" >
-                        Next
-                    </span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                    </div>
-                </a>
+                {{--    Last Page   --}}
+                @if($diarySegments->onLastPage())
+                    <a href="{{ $diarySegments->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-500 cursor-not-allowed transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200">
+                        <div class="flex items-center -mx-1">
+                        <span class="mx-1" >
+                            Next
+                        </span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </div>
+                    </a>
+                @else
+                    <a href="{{ $diarySegments->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
+                        <div class="flex items-center -mx-1">
+                        <span class="mx-1" >
+                            Next
+                        </span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </div>
+                    </a>
 
-            @endif
+                @endif
+
+            </div>
         </div>
-    </div>
+
     </div>
 
 
@@ -457,9 +468,13 @@
             console.log(`previous page url: {{ $diarySegments->previousPageUrl() }}`)
         });
 
+
+        let segmentId = null;
         function showEditor(iter, segment) {
+            segmentId = segment.id;
+            // alert(segmentId);
             console.log(`iter: ` + iter);
-            // alert('a');
+            console.log(`iter: ` + iter);
             const text = segment.content;
             const viewer = new toastui.Editor({
                 el: document.querySelector(`#segment-content-${iter}`), // 에디터를 적용할 요소 (컨테이너)
@@ -497,6 +512,11 @@
                 }
             });
             // console.log(editor.height);
+        }
+
+        function deleteSegment() {
+            alert(segmentId);
+            location.href = `/diaries/segments/${segmentId}`;
         }
 
     </script>

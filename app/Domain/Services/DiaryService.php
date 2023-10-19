@@ -39,7 +39,13 @@ class DiaryService
 
     public function findDiarySegmentsById(int $diaryId)
     {
-        return DiarySegment::where('diary_id',$diaryId)->orderBy('updated_at', 'desc')->paginate(6);
+        return DiarySegment::with('Diary')
+                    ->where('diary_id',$diaryId)
+                    ->orderBy('updated_at', 'desc')
+                    ->paginate(6);
+//                    ->leftjoin('diaries', 'diary_segments.diary_id', '=', 'diaries.id')
+//                    ->select('diary_segments.id', 'diaries.')
+
     }
 
     public function storeDiary(int $userId, DiaryStoreRequestDTO $dto)

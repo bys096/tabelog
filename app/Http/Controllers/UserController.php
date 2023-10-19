@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Domain\Models\User;
 use App\Domain\Services\UserService;
-use App\Enums\UserStatus;
+use App\Enums\StatusEnums;
 use App\Exceptions\DuplicateUserException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -50,15 +50,15 @@ class UserController extends Controller
 
         switch ($userStatus) {
 //            もう登録済みのEmail
-            case UserStatus::USER_EXIST:
+            case StatusEnums::USER_EXIST:
                 return response('Email is already exist', Response::HTTP_CONFLICT);
 
 //            登録可能なEmail
-            case UserStatus::USER_AVAILABLE:
+            case StatusEnums::USER_AVAILABLE:
                 return response('This email is usable', Response::HTTP_OK);
 
 //            削除され、登録できないEmail
-            case UserStatus::USER_DELETED:
+            case StatusEnums::USER_DELETED:
                 return response('This email is exist. but It has been deleted.', Response::HTTP_GONE);
 
 //                その他、予測できないErrorが発生した際

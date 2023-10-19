@@ -6,7 +6,7 @@ namespace App\Domain\Services;
 
 use App\Domain\Entity\User;
 use App\Domain\Repository\UserRepositoryInterface;
-use App\Enums\UserStatus;
+use App\Enums\StatusEnums;
 use App\Exceptions\DuplicateUserException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
@@ -25,12 +25,12 @@ class UserService
         $user = $this->userRepository->findByEmailWithTrashed($email);
 
         if ($user == null) {
-            return UserStatus::USER_AVAILABLE;
+            return StatusEnums::USER_AVAILABLE;
         } else if ($user->trashed()) {
-            return UserStatus::USER_DELETED;
+            return StatusEnums::USER_DELETED;
         } else {
 //            throw new DuplicateUserException();
-            return UserStatus::USER_EXIST;
+            return StatusEnums::USER_EXIST;
         }
     }
 

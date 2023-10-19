@@ -326,15 +326,17 @@
         });
 
         $('#addBtn').click(function() {
+            // alert('a');
             const diaryAddModal = $('#createModal');
 
             if (diaryAddModal.css('visibility') === 'hidden') {
                 diaryAddModal.css('visibility', 'visible');
-                diaryAddModal.attr('style', 'z-index: 1200 !important');
+                // diaryAddModal.attr('style', 'z-index: 1200');
+                diaryAddModal.css('z-index', 2);
             } else {
                 // diaryAddModal.style.setProperty('visibility', 'hidden', 'important');
-                diaryAddModal.attr('style', 'visibility: hidden !important');
-                // diaryAddModal.css('visibility', 'hidden');
+                // diaryAddModal.attr('style', 'visibility: hidden');
+                diaryAddModal.css('visibility', 'hidden');
 
                 diaryAddModal.css('z-index', '-1');
             }

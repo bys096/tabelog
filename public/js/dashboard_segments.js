@@ -35,23 +35,22 @@ cards.forEach(card => {
                 card.classList.toggle('card-img');
                 const date = card.getElementsByClassName('diary-date')[0];
                 const content = card.getElementsByClassName('segment-content')[0];
-
-                // console.log(editor.height);
-                const content2 = card.getElementsByClassName('segment-content')[0];
+                const btnGroup = document.getElementsByClassName('segment-btn-group')[0];
 
                 date.classList.toggle('hidden');
                 content.classList.toggle('hidden');
-                // const content = document.getElementsByClassName('segment-content')[0];
-                // console.log(content.textContent);
-                // content.classList.toggle('hidden');
+                btnGroup.classList.toggle('hidden');
+
             } else {
                 card.classList.remove("active");
                 mainContent.classList.remove("expanded");
                 card.classList.toggle('card-img');
                 const date = card.getElementsByClassName('diary-date')[0];
                 const content = card.getElementsByClassName('segment-content')[0];
+                const btnGroup = document.getElementsByClassName('segment-btn-group')[0];
                 date.classList.toggle('hidden');
                 content.classList.toggle('hidden');
+                btnGroup.classList.toggle('hidden');
             }
         });
     });
