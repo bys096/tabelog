@@ -163,7 +163,7 @@
             </div>
             <div class="main">
                 <div class="main-header">
-                    <div class="main-header__title">{{ $diarySegments[0]->diary->date }}</div>
+                    <div class="main-header__title">{{ $diarySegments[0]->date }}</div>
                     {{--            <div class="main-header__avatars">--}}
                     {{--                <button class="add-button"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">--}}
                     {{--                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>--}}
@@ -174,6 +174,17 @@
                     <div class="segment-btn-group hidden">
                         <button class="">Modify</button>
                         <button class="" onclick="deleteSegment();">Delete</button>
+                        <div class="tags">
+                            @foreach($diarySegments->items() as $segment)
+                                <div id="segment_{{ $segment->id }}">
+                                @foreach($segment->hashTags as $tag)
+                                        @if($segment->id == $tag->pivot->diary_segment_id)
+                                            <div class="segment_{{ $segment->id }}_hash_tag hidden"># {{ $segment->id }} {{ $tag->tag_name }}</div>
+                                        @endif
+                                @endforeach
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                     <button class="main-header__add" id="addBtn">
                         <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -474,7 +485,19 @@
             segmentId = segment.id;
             // alert(segmentId);
             console.log(`iter: ` + iter);
-            console.log(`iter: ` + iter);
+
+            const hashTagSegment = document.getElementById(`segment_${segmentId}`);
+            const hashTags = hashTagSegment.querySelectorAll('div');
+            console.log('hashTags')
+            console.log(hashTags);
+            hashTags.forEach((div) => {
+                console.log(div.innerText);
+                setTimeout(function () {
+                    div.classList.toggle('hidden');
+                }, 2)
+            });
+
+
             const text = segment.content;
             const viewer = new toastui.Editor({
                 el: document.querySelector(`#segment-content-${iter}`), // 에디터를 적용할 요소 (컨테이너)

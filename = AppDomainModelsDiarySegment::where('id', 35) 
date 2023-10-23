@@ -1,0 +1,32 @@
+[90m= [39m[34;4mIlluminate\Database\Eloquent\Collection[39;24m {#7334
+    [34mall[39m: [
+      [34;4mApp\Domain\Models\DiarySegment[39;24m {#7324
+        [34mcontent[39m: "[32mheelo tag[39m",
+        [34mmeal_time[39m: "[32mbreakfast[39m",
+        [34mdate[39m: "[32m2023-10-28[39m",
+        [34mtag_name[39m: "[32mtag1[39m",
+        [34mhashTags[39m: [34;4mIlluminate\Database\Eloquent\Collection[39;24m {#7329
+          [34mall[39m: [],
+        },
+      },
+      [34;4mApp\Domain\Models\DiarySegment[39;24m {#7323
+        [34mcontent[39m: "[32mheelo tag[39m",
+        [34mmeal_time[39m: "[32mbreakfast[39m",
+        [34mdate[39m: "[32m2023-10-28[39m",
+        [34mtag_name[39m: "[32mtag2[39m",
+        [34mhashTags[39m: [34;4mIlluminate\Database\Eloquent\Collection[39;24m {#7318
+          [34mall[39m: [],
+        },
+      },
+      [34;4mApp\Domain\Models\DiarySegment[39;24m {#7322
+        [34mcontent[39m: "[32mheelo tag[39m",
+        [34mmeal_time[39m: "[32mbreakfast[39m",
+        [34mdate[39m: "[32m2023-10-28[39m",
+        [34mtag_name[39m: "[32mtag3[39m",
+        [34mhashTags[39m: [34;4mIlluminate\Database\Eloquent\Collection[39;24m {#7320
+          [34mall[39m: [],
+        },
+      },
+    ],
+  }
+

@@ -1,0 +1,15 @@
+[90m= [39m[34;4mIlluminate\Database\Eloquent\Collection[39;24m {#7327
+    [34mall[39m: [
+      [34;4mApp\Domain\Models\DiarySegment[39;24m {#7232
+        [34mid[39m: [35m27[39m,
+        [34mdiary_id[39m: [35m27[39m,
+        [34mcontent[39m: "[32mheelo tag[39m",
+        [34mmeal_time[39m: "[32mbreakfast[39m",
+        [34mcreated_at[39m: "[32m2023-10-23 15:21:02[39m",
+        [34mupdated_at[39m: "[32m2023-10-23 15:21:02[39m",
+        [34muser_id[39m: [35m4[39m,
+        [34mdate[39m: "[32m2023-10-28[39m",
+      },
+    ],
+  }
+

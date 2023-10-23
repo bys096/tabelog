@@ -39,12 +39,12 @@ class DiaryService
 
     public function findDiarySegmentsById(int $diaryId)
     {
-        return DiarySegment::with('Diary')
+        return DiarySegment::with('hashTags')
+                    ->join('diaries', 'diaries.id', '=', 'diary_segments.diary_id')
                     ->where('diary_id',$diaryId)
-                    ->orderBy('updated_at', 'desc')
+                    ->select('diary_segments.id', 'diary_segments.diary_id', 'diary_segments.content', 'meal_time', 'diary_segments.created_at', 'date', 'diaries.user_id')
+                    ->orderBy('diary_segments.updated_at', 'desc')
                     ->paginate(6);
-//                    ->leftjoin('diaries', 'diary_segments.diary_id', '=', 'diaries.id')
-//                    ->select('diary_segments.id', 'diaries.')
 
     }
 
