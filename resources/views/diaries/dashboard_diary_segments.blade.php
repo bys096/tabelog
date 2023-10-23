@@ -251,7 +251,7 @@
 
                 {{--    Last Page   --}}
                 @if($diarySegments->onLastPage())
-                    <a href="{{ $diarySegments->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-500 cursor-not-allowed transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200">
+                    <a href="{{ $diarySegments->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-500 cursor-not-allowed transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-600">
                         <div class="flex items-center -mx-1">
                         <span class="mx-1" >
                             Next
