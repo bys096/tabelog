@@ -1,3 +1,4 @@
+
 /* ====================== *
  *  Toggle Between        *
  *  Sign Up / Login       *
@@ -35,7 +36,7 @@ paper.install(window);
 paper.setup(document.getElementById("canvas"));
 
 // Paper JS Variables
-var canvasWidth, 
+var canvasWidth,
     canvasHeight,
     canvasMiddleX,
     canvasMiddleY;
@@ -53,42 +54,42 @@ function getCanvasBounds() {
   // Set path position
   var position1 = {
     x: (canvasMiddleX / 2) + 100,
-    y: 100, 
+    y: 100,
   };
 
   var position2 = {
     x: 200,
-    y: canvasMiddleY, 
+    y: canvasMiddleY,
   };
 
   var position3 = {
     x: (canvasMiddleX - 50) + (canvasMiddleX / 2),
-    y: 150, 
+    y: 150,
   };
 
   var position4 = {
     x: 0,
-    y: canvasMiddleY + 100, 
+    y: canvasMiddleY + 100,
   };
 
   var position5 = {
     x: canvasWidth - 130,
-    y: canvasHeight - 75, 
+    y: canvasHeight - 75,
   };
 
   var position6 = {
     x: canvasMiddleX + 80,
-    y: canvasHeight - 50, 
+    y: canvasHeight - 50,
   };
-  
+
   var position7 = {
     x: canvasWidth + 60,
-    y: canvasMiddleY - 50, 
+    y: canvasMiddleY - 50,
   };
-  
+
   var position8 = {
     x: canvasMiddleX + 100,
-    y: canvasMiddleY + 100, 
+    y: canvasMiddleY + 100,
   };
 
   positionArray = [position3, position2, position5, position4, position1, position6, position7, position8];
@@ -103,8 +104,8 @@ function initializeShapes() {
   getCanvasBounds();
 
   var shapePathData = [
-    'M231,352l445-156L600,0L452,54L331,3L0,48L231,352', 
-    'M0,0l64,219L29,343l535,30L478,37l-133,4L0,0z', 
+    'M231,352l445-156L600,0L452,54L331,3L0,48L231,352',
+    'M0,0l64,219L29,343l535,30L478,37l-133,4L0,0z',
     'M0,65l16,138l96,107l270-2L470,0L337,4L0,65z',
     'M333,0L0,94l64,219L29,437l570-151l-196-42L333,0',
     'M331.9,3.6l-331,45l231,304l445-156l-76-196l-148,54L331.9,3.6z',

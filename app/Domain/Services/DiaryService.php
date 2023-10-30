@@ -2,10 +2,13 @@
 
 namespace App\Domain\Services;
 
+use App\Domain\DTO\DiaryListResponseDTO;
 use App\Domain\DTO\DiaryStoreRequestDTO;
 use App\Domain\DTO\DiaryUpdateRequestDTO;
+use App\Domain\DTO\SegmentListResponseDTO;
 use App\Domain\Models\Diary;
 use App\Domain\Models\DiarySegment;
+use App\Domain\Models\User;
 use App\Domain\Repository\DiaryRepositoryInterface;
 use App\Domain\Repository\DiarySegmentRepository;
 use App\Domain\Repository\UserRepositoryInterface;
@@ -32,19 +35,26 @@ class DiaryService
         $this->hashTagService = $hashTagService;
     }
 
-    public function findDiaries(int $userId)
+    public function findDiaries(int $userId): DiaryListResponseDTO
     {
-        return Diary::where('user_id', $userId)->orderBy('date', 'desc')->paginate(6);
+        $diaries = Diary::where('user_id', $userId)
+                    ->orderBy('date', 'desc')
+                    ->paginate(6);
+        $user = User::find($userId);
+        return new DiaryListResponseDTO($diaries, $user);
+
     }
 
-    public function findDiarySegmentsById(int $diaryId)
+    public function findDiarySegmentsById(int $diaryId, int $userId): SegmentListResponseDTO
     {
-        return DiarySegment::with('hashTags')
+        $segemnts = DiarySegment::with('hashTags')
                     ->join('diaries', 'diaries.id', '=', 'diary_segments.diary_id')
                     ->where('diary_id',$diaryId)
                     ->select('diary_segments.id', 'diary_segments.diary_id', 'diary_segments.content', 'meal_time', 'diary_segments.created_at', 'date', 'diaries.user_id')
                     ->orderBy('diary_segments.updated_at', 'desc')
                     ->paginate(6);
+        $user = User::find($userId);
+        return new SegmentListResponseDTO($segemnts, $user);
 
     }
 

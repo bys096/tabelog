@@ -14,10 +14,10 @@
 }
 
 body {
-
-
-
+    width: 100vw;
     background-color: #1b1b1b;
+    margin: 0;
+    padding: 0;
 }
 
 #app-container {
@@ -41,11 +41,8 @@ body {
 .app {
     background-color: var(--theme-bg-color);
     width: 94vw;
-    /*max-width: 1200px;*/
     min-height: 730px;
-    /*max-height: 900px;*/
     border-radius: 20px;
-    /*overflow: scroll;*/
     display: flex;
     position: relative;
 }
@@ -370,7 +367,7 @@ input:checked + .slider:before {
     position: absolute;
     z-index: 1200 !important;
     border-radius: 40px;
-    overflow: scroll;
+    overflow-y: scroll;
     /*left: 50vw;*/
 }
 .modal-container {

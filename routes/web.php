@@ -52,6 +52,11 @@ Route::get('/test', function (\Illuminate\Http\Request $request) {
 //    return view("test", ['a' => $a]);
     return view('test', ['list' => $list,]);
 })->name('test');
+
 Route::get('/test2', function () {
-    return view("dashboard");
+    return view("layout.app");
 })->name('test2');
+
+Route::get('/nutrient', function () {
+    return view("nutrient_search", ['user' => auth()->user()]);
+})->name('nutrient.search');

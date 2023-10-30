@@ -146,13 +146,13 @@
             <div class="sidebar">
                 <div class="user">
                     <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2360&q=80" alt="user photo" class="user-photo">
-                    <div class="user-name">Alexander</div>
-                    <div class="user-mail">alexander@email.com</div>
+                    <div class="user-name">{{ $dto->getUser()->name }}</div>
+                    <div class="user-mail">{{ $dto->getUser()->email }}</div>
                 </div>
                 <div class="sidebar-menu">
-                    <a href="#" class="sidebar-menu__link active">Dairy</a>
+                    <a href="{{ route('diary.index') }}" class="sidebar-menu__link active">Dairy</a>
                     <a href="#" class="sidebar-menu__link">통계</a>
-                    <a href="#" class="sidebar-menu__link">성분 검색</a>
+                    <a href="{{ route('nutrient.search') }}" class="sidebar-menu__link">성분 검색</a>
                     <a href="#" class="sidebar-menu__link">설정</a>
                 </div>
                 <button onclick="location.href='/auth/logout'">Log Out</button>
@@ -163,7 +163,7 @@
             </div>
             <div class="main">
                 <div class="main-header">
-                    <div class="main-header__title">{{ $diarySegments[0]->date }}</div>
+                    <div class="main-header__title">{{ $dto->getDtoList()[0]->date }}</div>
                     {{--            <div class="main-header__avatars">--}}
                     {{--                <button class="add-button"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">--}}
                     {{--                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>--}}
@@ -175,11 +175,11 @@
                         <button class="">Modify</button>
                         <button class="" onclick="deleteSegment();">Delete</button>
                         <div class="tags">
-                            @foreach($diarySegments->items() as $segment)
+                            @foreach($dto->getDtoList()->items() as $segment)
                                 <div id="segment_{{ $segment->id }}">
                                 @foreach($segment->hashTags as $tag)
                                         @if($segment->id == $tag->pivot->diary_segment_id)
-                                            <div class="segment_{{ $segment->id }}_hash_tag hidden"># {{ $segment->id }} {{ $tag->tag_name }}</div>
+                                            <div class="segment_{{ $segment->id }}_hash_tag hidden"># {{ $tag->tag_name }}</div>
                                         @endif
                                 @endforeach
                                 </div>
@@ -200,7 +200,7 @@
 
                 {{--    Diary List  --}}
                 <div class="main-content">
-                    @foreach($diarySegments as $segment)
+                    @foreach($dto->getDtoList() as $segment)
                         <div class="card card-{{ $loop->iteration }} card-img" onclick="showEditor({{ $loop->iteration }}, {{ $segment }})">
                             <div class="diary-date">{{ $segment->meal_time }} 日記</div>
                             <div class="segment-content hidden" id="segment-content-{{ $loop->iteration }}">
@@ -218,7 +218,7 @@
         <div class="pagination-container">
             <div class="flex pagination">
                 {{--    First Page  --}}
-                @if($diarySegments->onFirstPage() === true)
+                @if($dto->getDtoList()->onFirstPage() === true)
                     <a href="#" class="px-4 py-2 mx-1 text-gray-500 capitalize bg-white rounded-md cursor-not-allowed dark:bg-gray-800 dark:text-gray-600">
                         <div class="flex items-center -mx-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -231,7 +231,7 @@
                         </div>
                     </a>
                 @else
-                    <a href="{{ $diarySegments->previousPageUrl() }}" class="px-4 py-2 mx-1 text-gray-700 capitalize bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
+                    <a href="{{ $dto->getDtoList()->previousPageUrl() }}" class="px-4 py-2 mx-1 text-gray-700 capitalize bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
                         <div class="flex items-center -mx-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
@@ -243,15 +243,15 @@
                     </a>
                 @endif
 
-                @for($i = 1; $i <= $diarySegments->lastPage(); $i++)
-                    <a href="{{ $diarySegments->url($i) }}" class="hidden px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md sm:inline dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
+                @for($i = 1; $i <= $dto->getDtoList()->lastPage(); $i++)
+                    <a href="{{ $dto->getDtoList()->url($i) }}" class="hidden px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md sm:inline dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
                         {{ $i }}
                     </a>
                 @endfor
 
                 {{--    Last Page   --}}
-                @if($diarySegments->onLastPage())
-                    <a href="{{ $diarySegments->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-500 cursor-not-allowed transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-600">
+                @if($dto->getDtoList()->onLastPage())
+                    <a href="{{ $dto->getDtoList()->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-500 cursor-not-allowed transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-600">
                         <div class="flex items-center -mx-1">
                         <span class="mx-1" >
                             Next
@@ -262,7 +262,7 @@
                         </div>
                     </a>
                 @else
-                    <a href="{{ $diarySegments->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
+                    <a href="{{ $dto->getDtoList()->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
                         <div class="flex items-center -mx-1">
                         <span class="mx-1" >
                             Next
@@ -471,12 +471,12 @@
         }
         $('document').ready(function () {
             console.log('ready');
-            console.log(@json($diarySegments));
-            console.log(`total record: {{ $diarySegments->total() }}`)
-            console.log(`current page: {{ $diarySegments->currentPage() }}`)
-            console.log(`total page: {{ $diarySegments->lastPage() }}`)
-            console.log(`next page url: {{ $diarySegments->nextPageUrl() }}`)
-            console.log(`previous page url: {{ $diarySegments->previousPageUrl() }}`)
+            console.log(@json($dto->getDtoList()));
+            console.log(`total record: {{ $dto->getDtoList()->total() }}`)
+            console.log(`current page: {{ $dto->getDtoList()->currentPage() }}`)
+            console.log(`total page: {{ $dto->getDtoList()->lastPage() }}`)
+            console.log(`next page url: {{ $dto->getDtoList()->nextPageUrl() }}`)
+            console.log(`previous page url: {{ $dto->getDtoList()->previousPageUrl() }}`)
         });
 
 

@@ -22,10 +22,8 @@ class DiaryController extends Controller
     public function index()
     {
         $userId = auth()->id();
-        Log::info('Here is DashBoard Index Page.');
-        $diaries = $this->diaryService->findDiaries($userId);
-        Log::info(json_encode($diaries));
-        return view('dashboard')->with('diaries', $diaries);
+        $responseDTO = $this->diaryService->findDiaries($userId);
+        return view('dashboard')->with('dto', $responseDTO);
     }
 
 
@@ -77,9 +75,13 @@ class DiaryController extends Controller
 
     public function show(int $diaryId)
     {
-        Log::info('show diary id ' . $diaryId);
-        $diarySegments = $this->diaryService->findDiarySegmentsById($diaryId);
-//        Log::info(dd($diarySegments));
-        return view('diaries.dashboard_diary_segments', ['diarySegments' => $diarySegments, 'diaryId' => $diaryId]);
+        $userId = auth()->id();
+        $responseDto = $this->diaryService->findDiarySegmentsById($diaryId, $userId);
+        Log::info(json_encode($responseDto));
+        return view('diaries.dashboard_diary_segments', [
+            'dto' => $responseDto,
+            'diaryId' => $diaryId
+
+        ]);
     }
 }

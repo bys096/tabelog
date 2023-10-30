@@ -40,15 +40,15 @@
             <div class="hash-tags">
                 {{--    badge   --}}
                 <div id="badges-container">
-                    <span id="badge-dismiss-purple" class="inline-flex items-center px-2 py-1 mr-2 text-sm font-medium text-purple-800 bg-purple-100 rounded dark:bg-purple-900 dark:text-purple-300">
-                        Purple
-                        <button type="button" class="inline-flex items-center p-1 ml-2 text-sm text-purple-400 bg-transparent rounded-sm hover:bg-purple-200 hover:text-purple-900 dark:hover:bg-purple-800 dark:hover:text-purple-300" data-dismiss-target="#badge-dismiss-purple" aria-label="Remove">
-                            <svg class="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                            </svg>
-                            <span class="sr-only">Remove badge</span>
-                        </button>
-                    </span>
+{{--                    <span id="badge-dismiss-purple" class="inline-flex items-center px-2 py-1 mr-2 text-sm font-medium text-purple-800 bg-purple-100 rounded dark:bg-purple-900 dark:text-purple-300">--}}
+{{--                        Purple--}}
+{{--                        <button type="button" class="inline-flex items-center p-1 ml-2 text-sm text-purple-400 bg-transparent rounded-sm hover:bg-purple-200 hover:text-purple-900 dark:hover:bg-purple-800 dark:hover:text-purple-300" data-dismiss-target="#badge-dismiss-purple" aria-label="Remove">--}}
+{{--                            <svg class="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">--}}
+{{--                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>--}}
+{{--                            </svg>--}}
+{{--                            <span class="sr-only">Remove badge</span>--}}
+{{--                        </button>--}}
+{{--                    </span>--}}
                 </div>
 
                 {{--    HashTags Input    --}}
@@ -150,13 +150,13 @@
             <div class="sidebar">
                 <div class="user">
                     <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2360&q=80" alt="user photo" class="user-photo">
-                    <div class="user-name">Alexander</div>
-                    <div class="user-mail">alexander@email.com</div>
+                    <div class="user-name">{{ $dto->getUser()->name }}</div>
+                    <div class="user-mail">{{ $dto->getUser()->email }}</div>
                 </div>
                 <div class="sidebar-menu">
-                    <a href="#" class="sidebar-menu__link active">Dairy</a>
+                    <a href="{{ route('diary.index') }}" class="sidebar-menu__link active">Dairy</a>
                     <a href="#" class="sidebar-menu__link">통계</a>
-                    <a href="#" class="sidebar-menu__link">성분 검색</a>
+                    <a href="{{ route('nutrient.search') }}" class="sidebar-menu__link">성분 검색</a>
                     <a href="#" class="sidebar-menu__link">설정</a>
                 </div>
                 <button onclick="location.href='/auth/logout'">Log Out</button>
@@ -186,7 +186,7 @@
 
                 {{--    Diary List  --}}
                 <div class="main-content">
-                    @foreach($diaries as $diary)
+                    @foreach($dto->getDtoList() as $diary)
                             <div class="card card-{{ $loop->iteration }} card-img">
                                 <div class="diary-date" onclick="location.href='{{ route('diary.segments', ['diaryId' => $diary->id]) }}'">{{ $diary->date }}</div>
                             </div>
@@ -199,7 +199,7 @@
         <div class="pagination-container">
             <div class="flex pagination">
                 {{--    First Page  --}}
-                @if($diaries->onFirstPage() === true)
+                @if($dto->getDtoList()->onFirstPage() === true)
                     <a href="#" class="px-4 py-2 mx-1 text-gray-500 capitalize bg-white rounded-md cursor-not-allowed dark:bg-gray-800 dark:text-gray-600">
                         <div class="flex items-center -mx-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -212,7 +212,7 @@
                         </div>
                     </a>
                 @else
-                    <a href="{{ $diaries->previousPageUrl() }}" class="px-4 py-2 mx-1 text-gray-700 capitalize bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
+                    <a href="{{ $dto->getDtoList()->previousPageUrl() }}" class="px-4 py-2 mx-1 text-gray-700 capitalize bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
                         <div class="flex items-center -mx-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-1 rtl:-scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
@@ -224,15 +224,15 @@
                     </a>
                 @endif
 
-                @for($i = 1; $i <= $diaries->lastPage(); $i++)
-                    <a href="{{ $diaries->url($i) }}" class="hidden px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md sm:inline dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
+                @for($i = 1; $i <= $dto->getDtoList()->lastPage(); $i++)
+                    <a href="{{ $dto->getDtoList()->url($i) }}" class="hidden px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md sm:inline dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
                         {{ $i }}
                     </a>
                 @endfor
 
                 {{--    Last Page   --}}
-                @if($diaries->onLastPage())
-                    <a href="{{ $diaries->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-500 cursor-not-allowed transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200">
+                @if($dto->getDtoList()->onLastPage())
+                    <a href="{{ $dto->getDtoList()->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-500 cursor-not-allowed transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200">
                         <div class="flex items-center -mx-1">
                         <span class="mx-1" >
                             Next
@@ -243,7 +243,7 @@
                         </div>
                     </a>
                 @else
-                    <a href="{{ $diaries->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
+                    <a href="{{ $dto->getDtoList()->nextPageUrl() }}" class="px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200">
                         <div class="flex items-center -mx-1">
                         <span class="mx-1" >
                             Next
@@ -446,12 +446,12 @@
         }
         $('document').ready(function () {
             console.log('ready');
-            console.log(@json($diaries));
-            console.log(`total record: {{ $diaries->total() }}`)
-            console.log(`current page: {{ $diaries->currentPage() }}`)
-            console.log(`total page: {{ $diaries->lastPage() }}`)
-            console.log(`next page url: {{ $diaries->nextPageUrl() }}`)
-            console.log(`previous page url: {{ $diaries->previousPageUrl() }}`)
+            console.log(@json($dto));
+            console.log(`total record: {{ $dto->getDtoList()->total() }}`)
+            console.log(`current page: {{ $dto->getDtoList()->currentPage() }}`)
+            console.log(`total page: {{ $dto->getDtoList()->lastPage() }}`)
+            console.log(`next page url: {{ $dto->getDtoList()->nextPageUrl() }}`)
+            console.log(`previous page url: {{ $dto->getDtoList()->previousPageUrl() }}`)
         });
 
     </script>
